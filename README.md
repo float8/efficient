@@ -1,1 +1,1428 @@
-# efficient
+# efficient for web framework
+
+_efficient是基于Golang gin框架编写的web、command富框架。灵活的应用目录结构，可根据需要自定义目录结构。_
+
+_efficient 主要基于下面的包进行了封装, 基本保留了原有包的用法_
+
+https://github.com/gin-gonic/gin
+
+# 目录
+
+- [安装](#安装)
+- [快速开始](#快速开始)
+  - [WEB站点](#WEB站点)
+  - [代码生成器](#代码生成器)
+- [系统配置](#系统配置)
+- [路由规则](#路由规则)
+- [控制器](#控制器)
+- [数据层](#数据层)
+  - [数据库连接](#数据库连接)
+  - [数据层设计](#数据层设计)
+  - [Model](#Model)
+  - [Dao](#Dao)
+  - [应用](#应用)
+- [环境变量获取](#环境变量获取)
+- [生成器](#生成器)
+- [插件注册](#插件注册)
+
+## 安装
+
+###### 1. 首先需要安装 [Go](https://golang.org/) (**version 1.10+**), 可以使用下面的命令进行安装 efficient.
+
+```sh
+$ go get github.com/whf-sky/efficient
+```
+
+###### 2. 导入你的代码
+
+```go
+import "github.com/whf-sky/efficient"
+```
+
+如使用go mod包依赖管理工具,请参考下面命令
+
+###### Windows 下开启 GO111MODULE 的命令为：
+```sh
+$ set GO111MODULE=on
+```
+
+###### MacOS 或者 Linux 下开启 GO111MODULE 的命令为：
+```sh
+$ export GO111MODULE=on
+```
+
+###### Windows 下设置 GOPROXY 的命令为：
+```sh
+$ go env -w GOPROXY=https://goproxy.cn,direct
+```
+
+###### MacOS 或 Linux 下设置 GOPROXY 的命令为：
+```sh
+$ export GOPROXY=https://goproxy.cn
+```
+
+
+
+## 快速开始
+
+### WEB站点
+
+```sh
+$ cat main.go
+```
+
+```go
+package main
+
+import (
+  "github.com/whf-sky/efficient"
+  "net/http"
+)
+
+type TestController struct {
+  efficient.Controller
+}
+
+func (this *TestController) Get(cxt efficient.Context) {
+  id := cxt.Query("id")
+  cxt.String(200, "get:"+id)
+}
+
+func (this *TestController) Post(cxt efficient.Context) {
+  id := cxt.PostForm("id")
+  cxt.String(200, "post:"+id)
+}
+
+func main(){
+  efficient.Routers.Add("/test", &TestController{}, http.MethodGet, http.MethodPost)
+  efficient.WebRun()
+}
+
+```
+
+### 代码生成器
+
+```sh
+$ cat generate.go
+```
+
+```go
+package main
+
+import (
+	_ "github.com/go-sql-driver/mysql"
+	"github.com/whf-sky/efficient/widget/database"
+	"github.com/whf-sky/efficient/widget/generate"
+)
+
+func main() {
+	//实例化代码生成器
+	generate := generate.NewGenerate()
+	//应用生成
+	generate.Application()
+	//设置数据库并生成dao和model文件
+	generate.SetDb("mysql", database.NewDb().
+		MysqlDsn("127.0.0.1", "3306", "root", "123456", "test", "utf8mb4").
+		Open()).Database("test")
+}
+```
+
+## 系统配置
+
+设置web服务的端口地址
+
+```go
+efficient.Config.Addr = ":80"
+```
+
+设置Debug模式
+
+```go
+efficient.Config.Debug = true
+```
+
+设置APP名称
+
+```go
+efficient.Config.AppName = "efficient"
+```
+
+设置中间件
+
+```go
+efficient.Config.Middleware = []Middleware{
+	func(ctx *Context){},
+}
+```
+
+设置语言包
+
+```go
+//参考框架 widget/lang
+efficient.Config.Lang = Lang{
+    "validation_no_lang":"不存在此语言KEY'%s'，请检查是否拼写错误！",
+}
+```
+
+## 路由规则
+
+`参数1 地址目录的相对目录`
+
+`参数2 执行的实例化的控制器，控制器必须嵌入efficient.Controller`
+
+`参数3... 请求方式，请参考http包，可以添加多个，Restful风格`
+
+```go
+efficient.Routers.
+	Add("/test", &TestController{}, http.MethodGet, http.MethodPost).
+	Add("/demo", &DemoController{}, http.MethodGet, http.MethodPut)
+```
+
+## 控制器
+
+控制器必须内嵌`efficient.Controller`, 控制器的方法大小写请与http包中的方法名称保持一致，首字母大写即可。
+
+`efficient.Context` 用法与gin的`*Context`用法一致。
+
+gin框架地址 https://github.com/gin-gonic/gin
+
+```go
+package main
+
+import (
+  "github.com/whf-sky/efficient"
+)
+
+type TestController struct {
+  efficient.Controller
+}
+
+func (this *TestController) Get(cxt efficient.Context) {
+  id := cxt.Query("id")
+  cxt.String(200, "get:"+id)
+}
+
+func (this *TestController) Post(cxt efficient.Context) {
+  id := cxt.PostForm("id")
+  cxt.String(200, "post:"+id)
+}
+```
+
+## 数据层
+
+### 数据库连接
+
+此段代码可以设置数据库连接池
+
+```go
+database.NewDb().MysqlDsn("地址", "端口", "账户", "密码", "数据库", "数据库编码").Open(func(db *sql.DB) {
+    db.SetConnMaxIdleTime(time.Minute * 4) //设置最大连接生存时间
+    db.SetMaxOpenConns(5)                  //设置最大打开链接数
+    db.SetMaxIdleConns(5)                  //设置最大空闲链接
+    db.SetConnMaxLifetime(time.Minute * 2) //设置连接最大空闲时间
+})
+```
+
+### 数据层设计
+
+```
+数据层采用了model和dao的模式，model和dao可以通过代码生成器进行生成，建议直接采用生成器生成，在此基础上进行增加内容。
+
+model对应的数据表结构。
+
+dao层与model相对，对数据表进行操作。
+```
+
+### Model
+
+###### 定义Model
+
+示例代码
+
+```go
+package model
+
+import (
+	"encoding/json"
+	"github.com/whf-sky/efficient/widget/database"
+)
+
+//实例化model
+func NewUsers() *Users {
+	m := &Users{}
+	//mysql 数据库驱动
+	//test 数据库
+	//设置model的唯一标识，即当前表名即可
+    m.Model.Init("mysql","test", "users")
+	return m
+}
+//必须内嵌database.Model
+//结构体内对应的是表字段和字段信息，最终会把mysql字段类型转化为golang数据类型和自定义的数据类型
+type Users struct {
+	database.Model
+	Id         uint32          `column:"id" type:"int" auto_increment:"true" primary_key:"true" unsigned:"true" precision:"10" scale:"0" comment:"用户编号"`
+	Username   string          `column:"username" type:"varchar" unique:"true" length:"100" octet_length:"400" comment:"账户"`
+	Passwd     string          `column:"passwd" type:"varchar" length:"100" octet_length:"400" comment:"密码"`
+}
+
+//TableName 数据库表明方法
+func (u *Users) TableName() string {
+	return "users"
+}
+
+//Ptrs 所有数据表字段对应映射的接口体字段的指针
+func (u *Users) Ptrs() map[string]interface{} {
+	return map[string]interface{}{
+		"id":          &u.Id,
+		"username":    &u.Username,
+		"passwd":      &u.Passwd,
+	}
+}
+
+//Get 根据数据表字段进行获取model字段值
+func (u *Users) Get(key string) interface{} {
+	switch key {
+	case "id":
+		return u.Id
+	case "username":
+		return u.Username
+	case "passwd":
+		return u.Passwd
+	}
+	return nil
+}
+
+//Set 根据数据表字段进行设置model字段值
+func (u *Users) Set(key string, val interface{}) {
+	switch key {
+	case "id":
+		u.Id = val.(uint32)
+	case "username":
+		u.Username = val.(string)
+	case "passwd":
+		u.Passwd = val.(string)
+	}
+}
+
+//以下是model所有字段的get方法
+
+func (u *Users) GetId() uint32 {
+	return u.Id
+}
+
+func (u *Users) GetUsername() string {
+	return u.Username
+}
+
+func (u *Users) GetPasswd() string {
+	return u.Passwd
+}
+
+//以下是model所有字段的set方法
+
+func (u *Users) SetId(value uint32) *Users {
+	//添加赋值的字段，因为golang 结构体不能区分是否已经赋值所以使用u.AddAssColumns进行判断是否赋值
+	u.AddAssColumns("id")
+	u.Id = value
+	return u
+}
+
+func (u *Users) SetUsername(value string) *Users {
+	u.AddAssColumns("username")
+	u.Username = value
+	return u
+}
+
+func (u *Users) SetPasswd(value string) *Users {
+	u.AddAssColumns("passwd")
+	u.Passwd = value
+	return u
+}
+
+//InsertEvent Insert时自动触发此事件，在Insert执行之前触发
+func (u *Users) InsertEvent() {}
+
+
+//UpdateEvent Update时自动触发此事件，在Update执行之前触发
+func (u *Users) UpdateEvent() {}
+
+//把model格式化成json字符串
+func (u *Users) ToString() string {
+	bytes, _ := json.Marshal(u)
+	return string(bytes)
+}
+```
+
+Model struct `必须内嵌 database.Model`
+
+```go
+type Users struct {
+	database.Model
+	Id         uint32          `column:"id" type:"int" auto_increment:"true" primary_key:"true" unsigned:"true" precision:"10" scale:"0" comment:"用户编号"`
+	Username   string          `column:"username" type:"varchar" unique:"true" length:"100" octet_length:"400" comment:"账户"`
+	Passwd     string          `column:"passwd" type:"varchar" length:"100" octet_length:"400" comment:"密码"`
+}
+```
+
+New `实例化Model`
+
+```go
+func NewUsers() *Users {
+  m := &Users{}
+  m.init("users")  //设置model的唯一标识，即当前表名即可
+  return m
+}
+```
+
+TableName  `表名的方法；使用方法可以根据字段信息执行自定义分表`
+
+```go
+func (u *Users) TableName() string {
+	return "表名"
+}
+```
+
+Ptrs `所有数据表字段对应Model字段的指针；主要用于dao的封装中`
+
+```go
+func (u *Users) Ptrs() map[string]interface{} {
+	return map[string]interface{}{
+		"id":          &u.Id,
+		"username":    &u.Username,
+		"passwd":      &u.Passwd,
+	}
+}
+```
+
+Get `根据数据表字段获取Model字段的值`
+
+```go
+func (u *Users) Get(key string) interface{} {
+  switch key {
+  case "id":
+    return u.Id
+  case "username":
+    return u.Username
+  case "passwd":
+    return u.Passwd
+  }
+  return nil
+}
+```
+
+Set `根据数据表字段设置Model字段的值`
+
+```go
+func (u *Users) Set(key string, val interface{}) {
+  switch key {
+  case "id":
+    u.Id = val.(uint32)
+  case "username":
+    u.Username = val.(string)
+  case "passwd":
+  	u.Passwd = val.(string)
+  }
+}
+```
+
+InsertEvent `Insert时自动触发此事件，在Insert执行之前触发`
+
+```go
+func (u *Users) InsertEvent() {}
+```
+
+UpdateEvent `Update时自动触发此事件，在Update执行之前触发`
+
+```go
+func (u *Users) UpdateEvent() {}
+```
+
+ToString `把model格式化成json字符串`
+
+```go
+func (u *Users) ToString() string {
+  bytes, _ := json.Marshal(u)
+  return string(bytes)
+}
+```
+
+ToString `把model格式化成json字符串`
+
+```go
+func (u *Users) ToString() string {
+  bytes, _ := json.Marshal(u)
+  return string(bytes)
+}
+```
+
+###### 标签注解
+
+标签
+
+```
+column 表字段，字符串
+
+type 表类型，字符串
+
+enum 枚举类型的选项值，值的格式：{'北京','上海','重庆'}"
+
+auto_increment 是否自增，字符串的布尔型，true：代表自增
+
+primary_key 是否是主键，字符串的布尔型，true：代表主键
+
+unique 是否是唯一索引，字符串的布尔型，true：代表是唯一索引
+
+unsigned 是否有符号，字符串的布尔型，true：没有符号
+
+null 字段是否为空，字符串的布尔型，true：空
+
+precision 数字精度
+
+scale 小数位精度
+
+length 字符串长度
+
+octet_length 字符串字节长度
+
+default 默认值
+
+comment 字段注释，可以进行修改作为验证器的提示文字
+
+on_insert_time insert时自动添加时间
+
+on_update_time update时自动添加时间
+
+validators 验证器，验证器请参考 widget/validation
+```
+
+validators 示例 `数据类型请保持与字段的原生即golang原始类型一致`
+
+```
+validators="gt,lt" v-gt="int:5" v-lt="int:20"
+```
+
+###### Model字段的数据类型
+
+字段非NULL类型 `字段默认不为空的情况下mysql类型对应的golang类型，包含有符号和无符号类型`
+
+```go
+var types = map[string]goType{
+	"time": {
+		name: "string",
+	},
+	"date": {
+		name: "dtype.Date",
+		pkg:  "github.com/whf-sky/efficient/widget/dtype",
+	},
+	"datetime": {
+		name: "dtype.Time",
+		pkg:  "github.com/whf-sky/efficient/widget/dtype",
+	},
+	"timestamp": {
+		name: "dtype.Time",
+		pkg:  "github.com/whf-sky/efficient/widget/dtype",
+	},
+	"year": {
+		name: "string",
+	},
+	"decimal": {
+		name: "decimal.Decimal",
+		pkg:  "github.com/shopspring/decimal",
+	},
+	"numeric": {
+		name: "decimal.Decimal",
+		pkg:  "github.com/shopspring/decimal",
+	},
+	"bit": {
+		name: "dtype.Bit",
+		pkg:  "github.com/whf-sky/efficient/widget/dtype",
+	},
+	"bits": {
+		name: "dtype.Bits",
+		pkg:  "github.com/whf-sky/efficient/widget/dtype",
+	},
+	"char": {
+		name: "string",
+	},
+	"varchar": {
+		name: "string",
+	},
+	"tinytext": {
+		name: "string",
+	},
+	"text": {
+		name: "string",
+	},
+	"mediumtext": {
+		name: "string",
+	},
+	"longtext": {
+		name: "string",
+	},
+	"enum": {
+		name: "string",
+	},
+	"set": {
+		name: "dtype.Set",
+		pkg:  "github.com/whf-sky/efficient/widget/dtype",
+	},
+	"tinyint": {
+		name:     "int8",
+		unsigned: goUtype{name: "uint8"},
+	},
+	"smallint": {
+		name:     "int16",
+		unsigned: goUtype{name: "uint16"},
+	},
+	"mediumint": {
+		name:     "int32",
+		unsigned: goUtype{name: "uint32"},
+	},
+	"int": {
+		name:     "int32",
+		unsigned: goUtype{name: "uint32"},
+	},
+	"integer": {
+		name:     "int32",
+		unsigned: goUtype{name: "uint32"},
+	},
+	"bigint": {
+		name:     "int64",
+		unsigned: goUtype{name: "uint64"},
+	},
+	"double": {
+		name: "float64",
+	},
+	"float": {
+		name: "float64",
+	},
+	"real": {
+		name: "float64",
+	},
+}
+```
+
+字段NULL类型 `字段默认为空的情况下mysql类型对应的golang类型，包含有符号和无符号类型`
+
+```go
+var nullTypes = map[string]goType{
+	"date": {
+		name: "dtype.NullDate",
+		pkg:  "github.com/whf-sky/efficient/widget/dtype",
+	},
+	"datetime": {
+		name: "dtype.NullTime",
+		pkg:  "github.com/whf-sky/efficient/widget/dtype",
+	},
+	"timestamp": {
+		name: "dtype.Time",
+		pkg:  "github.com/whf-sky/efficient/widget/dtype",
+	},
+	"time": {
+		name: "sql.NullString",
+		pkg:  "database/sql",
+	},
+	"year": {
+		name: "sql.NullString",
+		pkg:  "database/sql",
+	},
+	"bit": {
+		name: "dtype.NullBit",
+		pkg:  "github.com/whf-sky/efficient/widget/dtype",
+	},
+	"bits": {
+		name: "dtype.NullBits",
+		pkg:  "github.com/whf-sky/efficient/widget/dtype",
+	},
+	"char": {
+		name: "sql.NullString",
+		pkg:  "database/sql",
+	},
+	"varchar": {
+		name: "sql.NullString",
+		pkg:  "database/sql",
+	},
+	"tinytext": {
+		name: "sql.NullString",
+		pkg:  "database/sql",
+	},
+	"text": {
+		name: "sql.NullString",
+		pkg:  "database/sql",
+	},
+	"mediumtext": {
+		name: "sql.NullString",
+		pkg:  "database/sql",
+	},
+	"longtext": {
+		name: "sql.NullString",
+		pkg:  "database/sql",
+	},
+	"enum": {
+		name: "sql.NullString",
+		pkg:  "database/sql",
+	},
+	"set": {
+		name: "dtype.NullSet",
+		pkg:  "github.com/whf-sky/efficient/widget/dtype",
+	},
+	"double": {
+		name:     "sql.NullFloat64",
+		pkg:      "database/sql",
+	},
+	"float": {
+		name: "sql.NullFloat64",
+		pkg:  "database/sql",
+	},
+	"real": {
+		name: "sql.NullFloat64",
+		pkg:  "database/sql",
+	},
+	"decimal": {
+		name: "decimal.Decimal",
+		pkg:  "github.com/shopspring/decimal",
+	},
+	"numeric": {
+		name: "decimal.Decimal",
+		pkg:  "github.com/shopspring/decimal",
+	},
+	"tinyint": {
+		name:     "dtype.NullInt8",
+		pkg:      "github.com/whf-sky/efficient/widget/dtype",
+		unsigned: goUtype{
+			name:     "dtype.NullUint8",
+			pkg:      "github.com/whf-sky/efficient/widget/dtype",
+		},
+	},
+	"smallint": {
+		name:     "sql.NullInt16",
+		pkg:      "database/sql",
+		unsigned: goUtype{
+			name:     "dtype.NullUint16",
+			pkg:      "github.com/whf-sky/efficient/widget/dtype",
+		},
+	},
+	"mediumint": {
+		name:     "sql.NullInt32",
+		pkg:      "database/sql",
+		unsigned: goUtype{
+			name:     "dtype.NullUint32",
+			pkg:      "github.com/whf-sky/efficient/widget/dtype",
+		},
+	},
+	"int": {
+		name: "sql.NullInt32",
+		pkg:  "database/sql",
+		unsigned: goUtype{
+			name:     "dtype.NullUint32",
+			pkg:      "github.com/whf-sky/efficient/widget/dtype",
+		},
+	},
+	"integer": {
+		name:     "sql.NullInt32",
+		pkg:      "database/sql",
+		unsigned: goUtype{
+			name:     "dtype.NullUint32",
+			pkg:      "github.com/whf-sky/efficient/widget/dtype",
+		},
+	},
+	"bigint": {
+		name: "sql.NullInt64",
+		pkg:  "database/sql",
+		unsigned: goUtype{
+			name:     "dtype.NullUint64",
+			pkg:      "github.com/whf-sky/efficient/widget/dtype",
+		},
+	},
+}
+
+```
+
+###### 注册Model
+
+`因为框架初始化时会解析结构体标签所以必须对Model进行注册`
+
+Register
+
+```go
+database.RegisterModel(NewUsers())
+```
+
+父Model `在应用时可设置父Model，表Model可以直接嵌入父Model`
+
+```go
+package model
+
+import "github.com/whf-sky/efficient/widget/database"
+
+type Model struct {
+  database.Model
+}
+
+func (m *Model) init(key string) *Model {
+  m.Model.Init("mysql","test", key)
+  return m
+}
+
+func init() {
+  database.RegisterModel(NewUsers())
+}
+
+
+func NewUsers() *Users {
+  m := &Users{}
+  m.init("users")
+  return m
+}
+
+type Users struct {
+  Model
+  Id         uint32          `column:"id" type:"int" auto_increment:"true" primary_key:"true" unsigned:"true" precision:"10" scale:"0" comment:"用户编号"`
+  Username   string          `column:"username" type:"varchar" unique:"true" length:"100" octet_length:"400" comment:"账户"`
+  Passwd     string          `column:"passwd" type:"varchar" length:"100" octet_length:"400" comment:"密码"`
+}
+
+```
+
+### Dao
+
+###### 定义Dao 
+
+示例代码
+
+```go
+package dao
+
+import (
+  "database/sql"
+  _ "github.com/go-sql-driver/mysql"
+  "github.com/whf-sky/efficient.demo/application/model"
+  "github.com/whf-sky/efficient/widget/database"
+  "time"
+)
+
+//请重新配置数据连接信息
+var db = func() *sql.DB {
+  return database.NewDb().MysqlDsn("127.0.0.1", "3306", "root", "123456", "test", "utf8mb4").Open(func(db *sql.DB) {
+    db.SetConnMaxIdleTime(time.Minute * 4) //设置最大连接生存时间
+    db.SetMaxOpenConns(5)                  //设置最大打开链接数
+    db.SetMaxIdleConns(5)                  //设置最大空闲链接
+    db.SetConnMaxLifetime(time.Minute * 2) //设置连接最大空闲时间
+  })
+}()
+
+func NewUsersDao(db *sql.DB) *UsersDao {
+  d := &UsersDao{}
+  d.SetDb(db)
+  d.DriverName("mysql")
+  d.SetModel(func() database.ModelInterface {
+    return model.NewUsers()
+  })
+  return d
+}
+
+type UsersDao struct {
+  database.Dao
+}
+
+```
+
+Dao struct `必须内嵌 database.Dao `
+
+```go
+type UsersDao struct {
+  database.Dao
+}
+
+```
+
+new
+
+` d.SetDb(db) 设置数据库连接，数据类型：*sql.DB`
+
+` d.DriverName("mysql") 设置数据库驱动`
+
+` d.SetModel(func() database.ModelInterface { return model.NewUsers()}) 设置Dao使用的模型`
+
+```go
+func NewUsersDao(db *sql.DB) *UsersDao {
+  d := &UsersDao{}
+  d.SetDb(db)
+  d.DriverName("mysql")
+  d.SetModel(func() database.ModelInterface {
+    return model.NewUsers()
+  })
+  return d
+}
+```
+
+###### Dao应用
+
+父Dao `应用时可以设置父Dao`
+
+```go
+package dao
+
+import (
+	"database/sql"
+	_ "github.com/go-sql-driver/mysql"
+	"github.com/whf-sky/efficient/widget/database"
+	"time"
+)
+
+//数据库连接
+var db = func() *sql.DB {
+	return database.NewDb().MysqlDsn("127.0.0.1", "3306", "root", "123456", "test", "utf8mb4").Open(func(db *sql.DB) {
+		db.SetConnMaxIdleTime(time.Minute * 4) //设置最大连接生存时间
+		db.SetMaxOpenConns(5)                  //设置最大打开链接数
+		db.SetMaxIdleConns(5)                  //设置最大空闲链接
+		db.SetConnMaxLifetime(time.Minute * 2) //设置连接最大空闲时间
+	})
+}()
+
+type Dao struct {
+	database.Dao
+}
+//设置初始化方法，在子结构体实例化时可以调用
+func (d *Dao) Init() *Dao {
+	d.SetDb(db)
+	d.DriverName("mysql")
+	return d
+}
+
+```
+
+父Dao的嵌入使用
+
+```go
+package dao
+
+import (
+	"efficient.demo/application/model"
+	"github.com/whf-sky/efficient/widget/database"
+)
+
+func NewUsersDao() *UsersDao {
+	d := &UsersDao{}
+	d.Init().SetModel(func() database.ModelInterface {
+		return model.NewUsers()
+	})
+	return d
+}
+
+type UsersDao struct {
+	Dao
+}
+
+```
+
+### 应用
+
+###### insert
+
+示例代码
+
+```go
+package main
+
+
+import (
+  "fmt"
+  "github.com/whf-sky/efficient.demo/application/dao"
+  "github.com/whf-sky/efficient.demo/application/model"
+)
+
+
+func main()  {
+  model.NewUsers().
+  	SetUsername("zhangsan").
+  	SetPasswd("123456").
+  	SetAge(10)
+  
+  usersDao := dao.NewUsersDao()
+  lastInsertId, err := usersDao.SetData(users).Insert()
+  
+  fmt.Println("Insert:", lastInsertId, err)
+}
+
+```
+
+SetData `设置数据`
+
+```go
+usersDao.SetData(users)
+```
+
+Insert `执行插入操作`
+
+```go
+usersDao.Insert()
+```
+
+###### update
+
+示例代码
+
+```go
+package main
+
+import (
+	"fmt"
+	"github.com/whf-sky/efficient.demo/application/dao"
+	"github.com/whf-sky/efficient.demo/application/model"
+)
+
+func main()  {
+	users := model.NewUsers()
+
+	users.SetUsername("lisi").
+		SetPasswd("456789").
+		SetAge(5)
+
+  usersDao := dao.NewUsersDao()
+  rowsAffected, err := usersDao.SetData(users).Where("id=?", 1342).Update()
+  fmt.Println("Update:", rowsAffected, err)
+}
+```
+
+SetData `设置数据`
+
+```go
+usersDao.SetData(users)
+```
+
+Where `设置条件`
+
+```go
+usersDao.Where("id=?", 1342)
+```
+
+Update `执行修改操作`
+
+```go
+usersDao.Update()
+```
+
+###### Delete
+
+示例代码
+
+```go
+package main
+
+import (
+	"fmt"
+	"github.com/whf-sky/efficient.demo/application/dao"
+	"github.com/whf-sky/efficient.demo/application/model"
+)
+
+func main() {
+  usersDao := dao.NewUsersDao()
+
+  rowsAffected, err := usersDao.Where("id=?", 1342).Delete()
+
+  fmt.Println("Delete:", rowsAffected, err)
+}
+```
+
+Where `设置条件`
+
+```go
+usersDao.Where("id=?", 1342)
+```
+
+Delete `执行删除操作`
+
+```go
+usersDao.Delete()
+```
+
+###### QueryRow
+
+示例代码
+
+```go
+package main
+
+import (
+  "fmt"
+  "github.com/whf-sky/efficient.demo/application/dao"
+)
+
+func main()  {
+  var (
+    id int64
+    username string
+    passwd string
+  )
+  userDao := dao.NewUsersDao()
+  userDao.QueryRow("select id,username,passwd from users where id=?", 100)
+  userDao.Row(&id, &username, &passwd)
+  fmt.Println(id, username, passwd)
+}
+
+```
+
+QueryRow `单行查询`
+
+```go
+userDao.QueryRow("select id,username,passwd from users where id=?", 100)
+```
+
+Row `获取行结果`
+
+```go
+var (
+  id int64
+  username string
+  passwd string
+)
+userDao.Row(&id, &username, &passwd)
+```
+
+###### Query
+
+示例代码
+
+```go
+package main
+
+import (
+	"fmt"
+	"github.com/whf-sky/efficient.demo/application/dao"
+)
+
+func main()  {
+	userDao := dao.NewUsersDao()
+	userDao.Query("select id,username,passwd from users where passwd=?", "123")
+}
+
+```
+
+Query `执行多行查询`
+
+```go
+userDao.Query("select id,username,passwd from users where passwd=?", "123")
+```
+
+Rows `原生获取多行数据`
+
+```go
+rows, err := userDao.Rows()
+```
+
+`Rows 示例代码`
+
+```go
+  rows, err := userDao.Rows()
+  defer func() {
+    err := rows.Close()
+    if err != nil {
+    	fmt.Println(err)
+    }
+  }()
+  if err != nil {
+    fmt.Println(err)
+  }
+  if err != nil {
+    fmt.Println(err)
+  }
+  result := []map[string]interface{}{}
+  for rows.Next() {
+    var id int64
+    var username string
+    var passwd string
+    rows.Scan(&id, &username, &passwd)
+    result = append(result, map[string]interface{}{
+    "id":id,
+    "username":username,
+    "passwd":passwd,
+    })
+  }
+  err = rows.Close()
+  if err != nil {
+    fmt.Println(err)
+  }
+  
+  fmt.Println(result)
+```
+
+ToMaps `把结果集放入 []map[string]interface{}`
+
+```go
+rows, err := userDao.ToMaps()
+```
+
+ToMap `获取单行数据,把结果集放入map[string]interface{}`
+
+`使用Query()获取单行数据一定要加limit 1`
+
+```go
+row, err := userDao.ToMap()
+```
+
+ToModels `把结果集放入 []ModelInterface`
+
+```go
+rows, err := userDao.ToModels()
+```
+
+ToModel `获取单行数据,把结果集放入 ModelInterface`
+
+`使用Query()获取单行数据一定要加limit 1`
+
+```go
+row, err := userDao.ToModel()
+```
+
+###### Exec
+
+示例代码
+
+```go
+result, err := userDao.Exec("delete from users where id=?", 10)
+if err != nil {
+    return 0, err
+}
+result.RowsAffected()
+```
+
+Exec `执行SQL`
+
+```go
+func (d *Dao) Exec(query string, args ...interface{}) (result sql.Result, err error)
+```
+
+###### transaction
+
+示例代码
+
+```go
+package main
+
+import (
+	"fmt"
+	"github.com/whf-sky/efficient.demo/application/dao"
+)
+
+func main()  {
+	var err error
+	var rowsAffected int64
+	usersDao := dao.NewUsersDao()
+
+	usersDao.Begin()
+
+	defer func() {
+		if err != nil {
+			_ = usersDao.Rollback()
+		}
+	}()
+
+	rowsAffected, err = usersDao.Where("id=?", 1342).Delete()
+
+	fmt.Println("rowsAffected:", rowsAffected)
+
+	if err != nil {
+		err = usersDao.Rollback()
+	} else {
+		err = usersDao.Commit()
+	}
+
+	fmt.Println("Delete:", err)
+}
+
+```
+
+
+Begin `创建事务`
+
+```go
+func (d *Dao) Begin() *Dao
+```
+
+Commit `提交事务`
+
+```go
+func (d *Dao) Commit() error
+```
+
+
+Rollback `回滚事务`
+
+```go
+func (d *Dao) Rollback() error
+```
+
+
+## 环境变量获取
+
+import
+
+```go
+import "github.com/whf-sky/efficient"
+```
+
+获取环境变量 `默认production`
+
+```go
+efficient.GetEnv()
+```
+
+## 生成器
+
+示例代码 `可以把配置信息提取到配置文件中`
+
+```go
+//实例化代码生成器
+generate := generate.NewGenerate()
+//应用生成
+generate.Application()
+//设置数据库并生成dao和model文件
+db : = database.NewDb().MysqlDsn("127.0.0.1", "3306", "root", "123456", "test", "utf8mb4").Open()
+generate.SetDb("mysql", db).Database("test")
+```
+
+import
+
+`暂只支持Mysql模型生成，可根据情况导入下面的包`
+
+`github.com/go-sql-driver/mysql mysql连接驱动包`
+
+`github.com/whf-sky/efficient/widget/database 数据层包`
+
+`github.com/whf-sky/efficient/widget/generate 生成器的包`
+
+```go
+import (
+	_ "github.com/go-sql-driver/mysql"
+	"github.com/whf-sky/efficient/widget/database"
+	"github.com/whf-sky/efficient/widget/generate"
+)
+```
+
+实例化生成器
+
+```go
+generate.NewGenerate()
+```
+
+应用目录设置
+
+```go
+//此目录是默认目录，无特殊需要可以不设置，需要在调用Application()前调用此方法
+appdirs := map[string]string{
+  "dao":     "application/dao",
+  "model":   "application/model",
+  "service": "application/service",
+  "config":  "config",
+  "cmd":     "cmd",
+}
+generate.SetAppDir(appdirs)
+```
+
+生成应用文件 `应用目录参考'应用目录设置'`
+```go
+NewGenerate().Application()
+```
+
+生成数据层文件
+
+```go
+generate.
+	//设置数据库连接
+	SetDb("驱动", database.NewDb().MysqlDsn("127.0.0.1", "3306", "root", "123456", "test", "utf8mb4").Open()).
+	//生成数据层文件
+	Database("数据库")
+```
+
+## 插件注册
+
+### 注册类型插件
+
+包
+
+```go
+import "github.com/whf-sky/efficient/widget/generate/database/mysql/generate"
+```
+
+RegisterType `注册mysql对应的golang数据类型，非NULL值的`
+
+`unsigned 是否有符号`
+
+`mType mysql数据类型`
+
+`gType golang数据类型`
+
+`pkgs golang的类型包，只能写一个`
+
+```go
+func RegisterType(unsigned bool, mType, gType string, pkgs ...string)
+```
+
+RegisterNullType `注册mysql对应的golang数据类型，可NULL值的`
+
+`unsigned 是否有符号`
+
+`mType mysql数据类型`
+
+`gType golang数据类型`
+
+`pkgs golang的类型包，只能写一个`
+
+```go
+func RegisterNullType(unsigned bool, mType, gType string, pkgs ...string) 
+```
+
+### 验证器
+
+包
+
+```go
+import "github.com/whf-sky/efficient/widget/validation"
+```
+
+RegisterValidation `注册验证器`
+
+`name 验证器名称`
+
+`validation 验证器`
+
+```go
+func RegisterValidation(name string, validation ValidationHandle)
+```
+
+### 代码生成器
+
+包
+
+```go
+import "github.com/whf-sky/efficient/widget/generate"
+```
+
+RegisterGenerate `注册生成器`
+
+`driver 数据库驱动`
+
+`generate 生成器`
+
+```go
+func RegisterGenerate(driver string, generate GenerateInterface) 
+```
+
+### SQL生成器
+
+包
+
+```go
+import "github.com/whf-sky/efficient/widget/database"
+```
+
+RegisterSQLS `注册SQL生成器`
+
+`driver 数据库驱动`
+
+`sql sql生成器`
+
+```go
+func RegisterSQLS(driver string, sql SQLInterface) 
+```

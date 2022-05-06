@@ -7,10 +7,10 @@ import (
 )
 
 func Lang(key string) string {
-	if _, ok := efficient.EConfig.Lang["validation_"+key]; ok {
-		return efficient.EConfig.Lang["validation_"+key]
+	if _, ok := efficient.Config.Lang["validation_"+key]; ok {
+		return efficient.Config.Lang["validation_"+key]
 	}
-	return efficient.EConfig.Lang["validation_no_lang"]
+	return efficient.Config.Lang["validation_no_lang"]
 }
 
 func Error(key string, a ...interface{}) error {

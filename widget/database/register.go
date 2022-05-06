@@ -35,8 +35,8 @@ type SQLInterface interface {
 
 var sqls = map[string]SQLInterface{}
 
-func RegisterSQLS(name string, sql SQLInterface) {
-	sqls[name] = sql
+func RegisterSQLS(driver string, sql SQLInterface) {
+	sqls[driver] = sql
 }
 
 func SQL(name string) SQLInterface {

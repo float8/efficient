@@ -10,10 +10,6 @@ type Date struct {
 	time.Time
 }
 
-func (d Date) Value() (driver.Value, error) {
-	return d.Format("2006-01-02"), nil
-}
-
 func (d *Date) Scan(src interface{}) error {
 	v, ok := src.([]byte)
 	if !ok {
@@ -24,21 +20,26 @@ func (d *Date) Scan(src interface{}) error {
 	return nil
 }
 
+func (d Date) Value() (driver.Value, error) {
+	str := d.Format("2006-01-02")
+	if str == "0001-01-01" {
+		return "0000-00-00", nil
+	}
+	return str, nil
+}
+
 func (d Date) String() string {
-	return d.Format("2006-01-02")
+	str := d.Format("2006-01-02")
+	if str == "0001-01-01" {
+		return "0000-00-00"
+	}
+	return str
 }
 
 
 type NullDate struct {
 	Date time.Time
 	Valid bool // Valid is true if NullTime is not NULL
-}
-
-func (n NullDate) Value() (driver.Value, error) {
-	if !n.Valid {
-		return nil, nil
-	}
-	return n.Date.Format("2006-01-02"), nil
 }
 
 func (n *NullDate) Scan(src interface{}) error {
@@ -56,7 +57,22 @@ func (n *NullDate) Scan(src interface{}) error {
 	return nil
 }
 
+func (n NullDate) Value() (driver.Value, error) {
+	if !n.Valid {
+		return nil, nil
+	}
+	str := n.Date.Format("2006-01-02")
+	if str == "0001-01-01" {
+		return "0000-00-00", nil
+	}
+	return str, nil
+}
+
 func (t NullDate) String() string {
-	return t.Date.Format("2006-01-02")
+	str := t.Date.Format("2006-01-02")
+	if str == "0001-01-01" {
+		return "0000-00-00"
+	}
+	return str
 }
 

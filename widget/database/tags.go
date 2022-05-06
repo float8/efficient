@@ -32,22 +32,23 @@ func NewTags() *Tags {
 }
 
 type Tags struct {
-	Column         string              //字段
-	Comment        string              //注释
-	Type           string              //类型
-	Unsigned       bool                //无符号
-	Precision      int64               //数字精度
-	Scale          int64               //小数位精度
-	Length         int64               //字符串字符长度
-	AutoIncrement  bool                //自增
-	PrimaryKey     bool                //主键
-	Unique         bool                //唯一索引
-	Default        interface{}         //默认值
-	Validators     validation.V        //检查字段内容
-	Null           bool                //不能为空
-	AutoCreateTime bool                //自动创建时间
-	AutoUpdateTime bool                //自动跟新时间
-	Enum           []string            //枚举
+	Column         string       //字段
+	Comment        string       //注释
+	Type           string       //类型
+	Unsigned       bool         //无符号
+	Precision      int64        //数字精度
+	Scale          int64        //小数位精度
+	Length         int64        //字符串字符长度
+	OctetLength    int64        //字符串字节长度
+	AutoIncrement  bool         //自增
+	PrimaryKey     bool         //主键
+	Unique         bool         //唯一索引
+	Default        interface{}  //默认值
+	Validators     validation.V //检查字段内容
+	Null           bool         //不能为空
+	AutoCreateTime bool         //自动创建时间
+	AutoUpdateTime bool         //自动跟新时间
+	Enum           []string     //枚举
 }
 
 //parseModel 对model进行分析，获取标签信息
@@ -79,13 +80,13 @@ func parseModel(model ModelInterface) {
 			Precision:      conv(field.Tag, "precision", "int64", int64(0)).(int64),
 			Scale:          conv(field.Tag, "scale", "int64", int64(0)).(int64),
 			Length:         conv(field.Tag, "length", "int64", int64(0)).(int64),
+			OctetLength:    conv(field.Tag, "octet_length", "int64", int64(0)).(int64),
 			Null:           conv(field.Tag, "null", "bool", false).(bool),
 			Default:        conv(field.Tag, "default", "string", "").(string),
 			Comment:        conv(field.Tag, "comment", "string", "").(string),
 			AutoCreateTime: conv(field.Tag, "on_insert_time", "bool", false).(bool),
 			AutoUpdateTime: conv(field.Tag, "on_update_time", "bool", false).(bool),
 			Validators:     validators(field.Tag, conv(field.Tag, "validators", "string", "").(string)),
-			//Events:			parseEvents(conv(field.Tag, "events", "string", "").(string)),
 		}
 		tags.Validators = fieldValidators(tags)
 		tags.Default = formattingDefault(tags)

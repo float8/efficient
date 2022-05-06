@@ -4,8 +4,7 @@ import (
 	"database/sql"
 	"github.com/whf-sky/efficient/widget/database"
 	"github.com/whf-sky/efficient/widget/generate/database/mysql/dao"
-	"log"
-	"os"
+	"github.com/whf-sky/efficient/widget/generate/public"
 	"strings"
 )
 
@@ -37,30 +36,13 @@ func (g *Generate) queryColumns(dbname string, tablename string) []database.Mode
 	return columnsDao.QueryColumns(dbname, tablename)
 }
 
-func (g *Generate) writeFile(path string, s string) {
-	_, err := os.Stat(path)
-	if err == nil {
-		return
-	}
-	f, err := os.Create(path)
-	if err != nil {
-		log.Println("open file error :", err)
-		return
-	}
-	// 关闭文件
-	defer f.Close()
-	_, err = f.WriteString(s)
-	if err != nil {
-		log.Println(err)
-		return
-	}
-}
+
 
 func (g *Generate) baseModel() *Generate {
 	var code string
 	code, g.mpkg = newGenerateBaseModel(g.tables, g.dbname, g.modelPath).generate()
 	path := g.modelPath + "/model.go"
-	g.writeFile(path, code)
+	public.WriteFile(path, code)
 	return g
 }
 
@@ -70,7 +52,7 @@ func (g *Generate) model() *Generate {
 		columns := g.queryColumns(g.dbname, table)
 		code := newGenerateModel(table, columns, g.mpkg).generate()
 		path := g.modelPath + "/" + strings.ToLower(table) + "_model.go"
-		g.writeFile(path, code)
+		public.WriteFile(path, code)
 	}
 	return g
 }
@@ -79,7 +61,7 @@ func (g *Generate) baseDao() *Generate {
 	var code string
 	code, g.dpkg = newGenerateBaseDao(g.tables, g.daoPath).generate()
 	path := g.daoPath + "/dao.go"
-	g.writeFile(path, code)
+	public.WriteFile(path, code)
 	return g
 }
 
@@ -88,7 +70,7 @@ func (g *Generate) dao() *Generate {
 	for _, table := range g.tables {
 		code := newGenerateDao(g.modelPath, g.dpkg, table).generate()
 		path := g.daoPath + "/" + strings.ToLower(table) + "_dao.go"
-		g.writeFile(path, code)
+		public.WriteFile(path, code)
 	}
 
 	return g

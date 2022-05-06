@@ -2,7 +2,6 @@ package database
 
 import (
 	"database/sql"
-	"fmt"
 	"github.com/whf-sky/efficient/widget/dtype"
 	"github.com/whf-sky/efficient/widget/validation"
 	"log"
@@ -95,7 +94,6 @@ func (d *Dao) Update() (rowsAffected int64, err error) {
 		return 0, err
 	}
 	args := append(values, d.whereArgs...)
-	fmt.Println(sql, args)
 	result, err := d.Exec(sql, args...)
 	if err != nil {
 		return 0, err
@@ -108,7 +106,6 @@ func (d *Dao) Delete() (rowsAffected int64, err error) {
 	if err != nil {
 		return 0, err
 	}
-	fmt.Println(sql, d.whereArgs)
 	result, err := d.Exec(sql, d.whereArgs...)
 	if err != nil {
 		return 0, err
@@ -342,7 +339,7 @@ func (d *Dao) sets() (columns []string, values []interface{}, err error) {
 	tags := d.model.tags()
 	model := d.data[0]
 	model.UpdateEvent()
-	for column, _ := range d.model.AssColumns() {
+	for column, _ := range model.AssColumns() {
 		columns = append(columns, column)
 		value :=  model.Get(column)
 		values = append(values, value)

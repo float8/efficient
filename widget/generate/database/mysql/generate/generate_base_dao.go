@@ -13,7 +13,7 @@ func newGenerateBaseDao(tables []string, path string) *generateBaseDao {
 			"db.SetConnMaxIdleTime(time.Minute * 4) //设置最大连接生存时间\n\t\t" +
 			"db.SetMaxOpenConns(5)                  //设置最大打开链接数\n\t\t" +
 			"db.SetMaxIdleConns(5)                  //设置最大空闲链接\n\t\t" +
-			"db.SetConnMaxIdleTime(time.Minute * 2) //设置连接最大空闲时间\n\t})\n}()\n\n" +
+			"db.SetConnMaxLifetime(time.Minute * 2) //设置连接最大空闲时间\n\t})\n}()\n\n" +
 			"type Dao struct {\n\tdatabase.Dao\n}\n\nfunc (d *Dao) Init() *Dao {\n\td.SetDb(db)\n\td.DriverName(\"mysql\")\n\treturn d\n}\n",
 	}
 }

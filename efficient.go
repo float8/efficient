@@ -11,18 +11,18 @@ type (
 )
 
 func WebRun() {
-	if !EConfig.Debug {
+	if !Config.Debug {
 		gin.SetMode(gin.ReleaseMode)
 	}
 	var router Engine
-	if len(EConfig.Middleware) > 0 {
+	if len(Config.Middleware) > 0 {
 		router = gin.New()
-		router.Use(EConfig.Middleware...)
+		router.Use(Config.Middleware...)
 	} else {
 		router = gin.Default()
 	}
 	registerRouters(router)
-	router.Run(EConfig.Addr)
+	router.Run(Config.Addr)
 }
 
 func CMDRun() {

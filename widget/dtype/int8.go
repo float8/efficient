@@ -35,7 +35,7 @@ func (n NullInt8) Value() (driver.Value, error) {
 	if !n.Valid {
 		return nil, nil
 	}
-	return n.Int8, nil
+	return int64(n.Int8), nil
 }
 
 // NullUint8 represents a uint8 that may be null.
@@ -67,5 +67,5 @@ func (n NullUint8) Value() (driver.Value, error) {
 	if !n.Valid {
 		return nil, nil
 	}
-	return n.Uint8, nil
+	return int64(n.Uint8), nil
 }

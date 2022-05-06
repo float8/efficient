@@ -58,8 +58,9 @@ func (r *routers) add(groupRelativePath string, httpMethods []string, relativePa
 	}
 }
 
-func (r *routers) Add(relativePath string, controller ControllerInterface, httpMethod ...string) {
+func (r *routers) Add(relativePath string, controller ControllerInterface, httpMethod ...string) *routers {
 	r.add("/", httpMethod, relativePath, controller)
+	return r
 }
 
 func (r *routers) handle(groupRelativePath string, httpMethod string, relativePath string, controller ControllerInterface) {

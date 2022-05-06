@@ -21,7 +21,7 @@ func newGenerateModel(tableName string, columns []database.ModelInterface, pkg s
 			"new":       "func New#model#() *#model# {\n\tm := &#model#{}\n\tm.init(\"#tablename#\")\n\treturn m\n}",
 			"ptrs":      "func (#modelvar# *#model#) Ptrs() map[string]interface{} {\n\treturn map[string]interface{}{#ptrs#}\n}",
 			"struct":    "type #model# struct {\n\tModel\n\t#fields#\n}",
-			"event":     "func (#modelvar# *#model#) Event(event, fun string) {}",
+			"event":     "func (#modelvar# *#model#) InsertEvent() {}\n\nfunc (#modelvar# *#model#) UpdateEvent() {}",
 			"tableName": "func (#modelvar# *#model#) TableName() string {\n\treturn \"#tablename#\"\n}",
 			"getFields": "func (#modelvar# *#model#) Get#field#() #type# {\n\treturn #modelvar#.#field#\n}",
 			"setFields": "func (#modelvar# *#model#) Set#field#(value #type#) *#model# {\n\t#modelvar#.AddAssColumns(\"#column#\")\n\t#modelvar#.#field# = value\n\treturn #modelvar#\n}",

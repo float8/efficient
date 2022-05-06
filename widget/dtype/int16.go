@@ -35,5 +35,5 @@ func (n NullUint16) Value() (driver.Value, error) {
 	if !n.Valid {
 		return nil, nil
 	}
-	return n.Uint16, nil
+	return int64(n.Uint16), nil
 }

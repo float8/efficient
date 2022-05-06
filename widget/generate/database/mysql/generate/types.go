@@ -46,7 +46,7 @@ func registerUtype(mType, gType string, pkgs ...string) {
 
 func RegisterNullType(unsigned bool, mType, gType string, pkgs ...string) {
 	if unsigned {
-		RegisterNullUtype(mType, gType, pkgs...)
+		registerNullUtype(mType, gType, pkgs...)
 		return
 	}
 	if len(pkgs) > 0 {
@@ -56,7 +56,7 @@ func RegisterNullType(unsigned bool, mType, gType string, pkgs ...string) {
 	types[mType] = goType{name: gType}
 }
 
-func RegisterNullUtype(mType, gType string, pkgs ...string) {
+func registerNullUtype(mType, gType string, pkgs ...string) {
 	if len(pkgs) > 0 {
 		nullTypes[mType] = goType{
 			name: nullTypes[mType].name,
