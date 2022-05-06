@@ -4,7 +4,7 @@ _efficient是基于Golang gin框架编写的web、command富框架。灵活的�
 
 _efficient 主要基于下面的包进行了封装, 基本保留了原有包的用法_
 
-https://github.com/gin-gonic/gin
+[gin github 地址点击这里](#https://github.com/gin-gonic/gin)
 
 # 目录
 
@@ -24,16 +24,20 @@ https://github.com/gin-gonic/gin
 - [环境变量获取](#环境变量获取)
 - [生成器](#生成器)
 - [插件注册](#插件注册)
+  - [注册数据类型](#注册数据类型)
+  - [注册验证器](#注册验证器)
+  - [注册代码生成器](#注册代码生成器)
+  - [注册SQL生成器](#注册SQL生成器)
 
-## 安装
+# 安装
 
-###### 1. 首先需要安装 [Go](https://golang.org/) (**version 1.10+**), 可以使用下面的命令进行安装 efficient.
+#### 1. 首先需要安装 [Go](https://golang.org/) (**version 1.10+**), 可以使用下面的命令进行安装 efficient.
 
 ```sh
 $ go get github.com/whf-sky/efficient
 ```
 
-###### 2. 导入你的代码
+#### 2. 导入你的代码
 
 ```go
 import "github.com/whf-sky/efficient"
@@ -41,31 +45,31 @@ import "github.com/whf-sky/efficient"
 
 如使用go mod包依赖管理工具,请参考下面命令
 
-###### Windows 下开启 GO111MODULE 的命令为：
+#### Windows 下开启 GO111MODULE 的命令为：
 ```sh
 $ set GO111MODULE=on
 ```
 
-###### MacOS 或者 Linux 下开启 GO111MODULE 的命令为：
+#### MacOS 或者 Linux 下开启 GO111MODULE 的命令为：
 ```sh
 $ export GO111MODULE=on
 ```
 
-###### Windows 下设置 GOPROXY 的命令为：
+#### Windows 下设置 GOPROXY 的命令为：
 ```sh
 $ go env -w GOPROXY=https://goproxy.cn,direct
 ```
 
-###### MacOS 或 Linux 下设置 GOPROXY 的命令为：
+#### MacOS 或 Linux 下设置 GOPROXY 的命令为：
 ```sh
 $ export GOPROXY=https://goproxy.cn
 ```
 
 
 
-## 快速开始
+# 快速开始
 
-### WEB站点
+## WEB站点
 
 ```sh
 $ cat main.go
@@ -100,7 +104,7 @@ func main(){
 
 ```
 
-### 代码生成器
+## 代码生成器
 
 ```sh
 $ cat generate.go
@@ -127,27 +131,27 @@ func main() {
 }
 ```
 
-## 系统配置
+# 系统配置
 
-设置web服务的端口地址
+#### 设置web服务的端口地址
 
 ```go
 efficient.Config.Addr = ":80"
 ```
 
-设置Debug模式
+#### 设置Debug模式
 
 ```go
 efficient.Config.Debug = true
 ```
 
-设置APP名称
+#### 设置APP名称
 
 ```go
 efficient.Config.AppName = "efficient"
 ```
 
-设置中间件
+#### 设置中间件
 
 ```go
 efficient.Config.Middleware = []Middleware{
@@ -155,7 +159,7 @@ efficient.Config.Middleware = []Middleware{
 }
 ```
 
-设置语言包
+#### 设置语言包
 
 ```go
 //参考框架 widget/lang
@@ -164,7 +168,7 @@ efficient.Config.Lang = Lang{
 }
 ```
 
-## 路由规则
+# 路由规则
 
 `参数1 地址目录的相对目录`
 
@@ -178,13 +182,15 @@ efficient.Routers.
 	Add("/demo", &DemoController{}, http.MethodGet, http.MethodPut)
 ```
 
-## 控制器
+# 控制器
 
 控制器必须内嵌`efficient.Controller`, 控制器的方法大小写请与http包中的方法名称保持一致，首字母大写即可。
 
 `efficient.Context` 用法与gin的`*Context`用法一致。
 
-gin框架地址 https://github.com/gin-gonic/gin
+[gin github 地址点击这里](#https://github.com/gin-gonic/gin)
+
+#### 示例代码
 
 ```go
 package main
@@ -208,11 +214,11 @@ func (this *TestController) Post(cxt efficient.Context) {
 }
 ```
 
-## 数据层
+# 数据层
 
-### 数据库连接
+## 数据库连接
 
-此段代码可以设置数据库连接池
+#### 设置数据库连接池
 
 ```go
 database.NewDb().MysqlDsn("地址", "端口", "账户", "密码", "数据库", "数据库编码").Open(func(db *sql.DB) {
@@ -223,7 +229,7 @@ database.NewDb().MysqlDsn("地址", "端口", "账户", "密码", "数据库", "
 })
 ```
 
-### 数据层设计
+## 数据层设计
 
 ```
 数据层采用了model和dao的模式，model和dao可以通过代码生成器进行生成，建议直接采用生成器生成，在此基础上进行增加内容。
@@ -233,11 +239,11 @@ model对应的数据表结构。
 dao层与model相对，对数据表进行操作。
 ```
 
-### Model
+## Model
 
-###### 定义Model
+### 1.定义Model
 
-示例代码
+#### 示例代码
 
 ```go
 package model
@@ -353,7 +359,9 @@ func (u *Users) ToString() string {
 }
 ```
 
-Model struct `必须内嵌 database.Model`
+#### Model struct 
+
+`必须内嵌 database.Model`
 
 ```go
 type Users struct {
@@ -364,7 +372,9 @@ type Users struct {
 }
 ```
 
-New `实例化Model`
+#### New 
+
+`实例化Model`
 
 ```go
 func NewUsers() *Users {
@@ -374,7 +384,9 @@ func NewUsers() *Users {
 }
 ```
 
-TableName  `表名的方法；使用方法可以根据字段信息执行自定义分表`
+#### TableName  
+
+`表名的方法；使用方法可以根据字段信息执行自定义分表`
 
 ```go
 func (u *Users) TableName() string {
@@ -382,7 +394,9 @@ func (u *Users) TableName() string {
 }
 ```
 
-Ptrs `所有数据表字段对应Model字段的指针；主要用于dao的封装中`
+#### Ptrs 
+
+`所有数据表字段对应Model字段的指针；主要用于dao的封装中`
 
 ```go
 func (u *Users) Ptrs() map[string]interface{} {
@@ -394,7 +408,9 @@ func (u *Users) Ptrs() map[string]interface{} {
 }
 ```
 
-Get `根据数据表字段获取Model字段的值`
+#### Get 
+
+`根据数据表字段获取Model字段的值`
 
 ```go
 func (u *Users) Get(key string) interface{} {
@@ -410,7 +426,9 @@ func (u *Users) Get(key string) interface{} {
 }
 ```
 
-Set `根据数据表字段设置Model字段的值`
+#### Set 
+
+`根据数据表字段设置Model字段的值`
 
 ```go
 func (u *Users) Set(key string, val interface{}) {
@@ -425,19 +443,25 @@ func (u *Users) Set(key string, val interface{}) {
 }
 ```
 
-InsertEvent `Insert时自动触发此事件，在Insert执行之前触发`
+#### InsertEvent 
+
+`Insert时自动触发此事件，在Insert执行之前触发`
 
 ```go
 func (u *Users) InsertEvent() {}
 ```
 
-UpdateEvent `Update时自动触发此事件，在Update执行之前触发`
+#### UpdateEvent 
+
+`Update时自动触发此事件，在Update执行之前触发`
 
 ```go
 func (u *Users) UpdateEvent() {}
 ```
 
-ToString `把model格式化成json字符串`
+#### ToString 
+
+`把model格式化成json字符串`
 
 ```go
 func (u *Users) ToString() string {
@@ -446,7 +470,9 @@ func (u *Users) ToString() string {
 }
 ```
 
-ToString `把model格式化成json字符串`
+#### ToString 
+
+`把model格式化成json字符串`
 
 ```go
 func (u *Users) ToString() string {
@@ -455,9 +481,9 @@ func (u *Users) ToString() string {
 }
 ```
 
-###### 标签注解
+### 2.标签注解
 
-标签
+#### 标签
 
 ```
 column 表字段，字符串
@@ -495,15 +521,19 @@ on_update_time update时自动添加时间
 validators 验证器，验证器请参考 widget/validation
 ```
 
-validators 示例 `数据类型请保持与字段的原生即golang原始类型一致`
+#### validators 示例 
+
+`数据类型请保持与字段的原生即golang原始类型一致`
 
 ```
 validators="gt,lt" v-gt="int:5" v-lt="int:20"
 ```
 
-###### Model字段的数据类型
+### 3.Model字段的数据类型
 
-字段非NULL类型 `字段默认不为空的情况下mysql类型对应的golang类型，包含有符号和无符号类型`
+#### 字段非NULL类型 
+
+`字段默认不为空的情况下mysql类型对应的golang类型，包含有符号和无符号类型`
 
 ```go
 var types = map[string]goType{
@@ -602,7 +632,9 @@ var types = map[string]goType{
 }
 ```
 
-字段NULL类型 `字段默认为空的情况下mysql类型对应的golang类型，包含有符号和无符号类型`
+#### 字段NULL类型 
+
+`字段默认为空的情况下mysql类型对应的golang类型，包含有符号和无符号类型`
 
 ```go
 var nullTypes = map[string]goType{
@@ -738,17 +770,19 @@ var nullTypes = map[string]goType{
 
 ```
 
-###### 注册Model
+### 4.注册Model
 
 `因为框架初始化时会解析结构体标签所以必须对Model进行注册`
 
-Register
+#### Register
 
 ```go
 database.RegisterModel(NewUsers())
 ```
 
-父Model `在应用时可设置父Model，表Model可以直接嵌入父Model`
+#### 父Model 
+
+`在应用时可设置父Model，表Model可以直接嵌入父Model`
 
 ```go
 package model
@@ -784,11 +818,11 @@ type Users struct {
 
 ```
 
-### Dao
+## Dao
 
-###### 定义Dao 
+### 1.定义Dao 
 
-示例代码
+#### 示例代码
 
 ```go
 package dao
@@ -827,7 +861,9 @@ type UsersDao struct {
 
 ```
 
-Dao struct `必须内嵌 database.Dao `
+#### Dao struct 
+
+`必须内嵌 database.Dao `
 
 ```go
 type UsersDao struct {
@@ -836,7 +872,7 @@ type UsersDao struct {
 
 ```
 
-new
+#### New
 
 ` d.SetDb(db) 设置数据库连接，数据类型：*sql.DB`
 
@@ -856,9 +892,11 @@ func NewUsersDao(db *sql.DB) *UsersDao {
 }
 ```
 
-###### Dao应用
+### 2.Dao应用
 
-父Dao `应用时可以设置父Dao`
+#### 父Dao 
+
+`应用时可以设置父Dao`
 
 ```go
 package dao
@@ -892,7 +930,7 @@ func (d *Dao) Init() *Dao {
 
 ```
 
-父Dao的嵌入使用
+#### 父Dao的嵌入使用
 
 ```go
 package dao
@@ -916,11 +954,11 @@ type UsersDao struct {
 
 ```
 
-### 应用
+## 应用
 
-###### insert
+### Insert
 
-示例代码
+#### 示例代码
 
 ```go
 package main
@@ -947,21 +985,25 @@ func main()  {
 
 ```
 
-SetData `设置数据`
+#### SetData 
+
+`设置数据`
 
 ```go
 usersDao.SetData(users)
 ```
 
-Insert `执行插入操作`
+#### Insert 
+
+`执行插入操作`
 
 ```go
 usersDao.Insert()
 ```
 
-###### update
+### update
 
-示例代码
+#### 示例代码
 
 ```go
 package main
@@ -985,27 +1027,33 @@ func main()  {
 }
 ```
 
-SetData `设置数据`
+#### SetData 
+
+`设置数据`
 
 ```go
 usersDao.SetData(users)
 ```
 
-Where `设置条件`
+#### Where 
+
+`设置条件`
 
 ```go
 usersDao.Where("id=?", 1342)
 ```
 
-Update `执行修改操作`
+#### Update 
+
+`执行修改操作`
 
 ```go
 usersDao.Update()
 ```
 
-###### Delete
+### Delete
 
-示例代码
+#### 示例代码
 
 ```go
 package main
@@ -1025,21 +1073,25 @@ func main() {
 }
 ```
 
-Where `设置条件`
+#### Where 
+
+`设置条件`
 
 ```go
 usersDao.Where("id=?", 1342)
 ```
 
-Delete `执行删除操作`
+#### Delete 
+
+`执行删除操作`
 
 ```go
 usersDao.Delete()
 ```
 
-###### QueryRow
+### QueryRow
 
-示例代码
+#### 示例代码
 
 ```go
 package main
@@ -1063,13 +1115,17 @@ func main()  {
 
 ```
 
-QueryRow `单行查询`
+#### QueryRow 
+
+`单行查询`
 
 ```go
 userDao.QueryRow("select id,username,passwd from users where id=?", 100)
 ```
 
-Row `获取行结果`
+#### Row 
+
+`获取行结果`
 
 ```go
 var (
@@ -1080,9 +1136,9 @@ var (
 userDao.Row(&id, &username, &passwd)
 ```
 
-###### Query
+### Query
 
-示例代码
+#### 示例代码
 
 ```go
 package main
@@ -1099,13 +1155,17 @@ func main()  {
 
 ```
 
-Query `执行多行查询`
+#### Query 
+
+`执行多行查询`
 
 ```go
 userDao.Query("select id,username,passwd from users where passwd=?", "123")
 ```
 
-Rows `原生获取多行数据`
+#### Rows 
+
+`原生获取多行数据`
 
 ```go
 rows, err := userDao.Rows()
@@ -1147,13 +1207,17 @@ rows, err := userDao.Rows()
   fmt.Println(result)
 ```
 
-ToMaps `把结果集放入 []map[string]interface{}`
+#### ToMaps 
+
+`把结果集放入 []map[string]interface{}`
 
 ```go
 rows, err := userDao.ToMaps()
 ```
 
-ToMap `获取单行数据,把结果集放入map[string]interface{}`
+#### ToMap 
+
+`获取单行数据,把结果集放入map[string]interface{}`
 
 `使用Query()获取单行数据一定要加limit 1`
 
@@ -1161,13 +1225,17 @@ ToMap `获取单行数据,把结果集放入map[string]interface{}`
 row, err := userDao.ToMap()
 ```
 
-ToModels `把结果集放入 []ModelInterface`
+#### ToModels 
+
+`把结果集放入 []ModelInterface`
 
 ```go
 rows, err := userDao.ToModels()
 ```
 
-ToModel `获取单行数据,把结果集放入 ModelInterface`
+#### ToModel 
+
+`获取单行数据,把结果集放入 ModelInterface`
 
 `使用Query()获取单行数据一定要加limit 1`
 
@@ -1175,9 +1243,9 @@ ToModel `获取单行数据,把结果集放入 ModelInterface`
 row, err := userDao.ToModel()
 ```
 
-###### Exec
+### Exec
 
-示例代码
+#### 示例代码
 
 ```go
 result, err := userDao.Exec("delete from users where id=?", 10)
@@ -1187,15 +1255,17 @@ if err != nil {
 result.RowsAffected()
 ```
 
-Exec `执行SQL`
+#### Exec 
+
+`执行SQL`
 
 ```go
 func (d *Dao) Exec(query string, args ...interface{}) (result sql.Result, err error)
 ```
 
-###### transaction
+### transaction
 
-示例代码
+#### 示例代码
 
 ```go
 package main
@@ -1234,43 +1304,53 @@ func main()  {
 ```
 
 
-Begin `创建事务`
+#### Begin 
+
+`创建事务`
 
 ```go
 func (d *Dao) Begin() *Dao
 ```
 
-Commit `提交事务`
+#### Commit 
+
+`提交事务`
 
 ```go
 func (d *Dao) Commit() error
 ```
 
 
-Rollback `回滚事务`
+#### Rollback 
+
+`回滚事务`
 
 ```go
 func (d *Dao) Rollback() error
 ```
 
 
-## 环境变量获取
+# 环境变量获取
 
-import
+#### import
 
 ```go
 import "github.com/whf-sky/efficient"
 ```
 
-获取环境变量 `默认production`
+#### 获取环境变量 
+
+`默认production`
 
 ```go
 efficient.GetEnv()
 ```
 
-## 生成器
+# 生成器
 
-示例代码 `可以把配置信息提取到配置文件中`
+#### 示例代码 
+
+`可以把配置信息提取到配置文件中`
 
 ```go
 //实例化代码生成器
@@ -1282,7 +1362,7 @@ db : = database.NewDb().MysqlDsn("127.0.0.1", "3306", "root", "123456", "test", 
 generate.SetDb("mysql", db).Database("test")
 ```
 
-import
+#### import
 
 `暂只支持Mysql模型生成，可根据情况导入下面的包`
 
@@ -1300,13 +1380,13 @@ import (
 )
 ```
 
-实例化生成器
+#### 实例化生成器
 
 ```go
 generate.NewGenerate()
 ```
 
-应用目录设置
+#### 应用目录设置
 
 ```go
 //此目录是默认目录，无特殊需要可以不设置，需要在调用Application()前调用此方法
@@ -1320,12 +1400,15 @@ appdirs := map[string]string{
 generate.SetAppDir(appdirs)
 ```
 
-生成应用文件 `应用目录参考'应用目录设置'`
+#### 生成应用文件 
+
+`应用目录参考'应用目录设置'`
+
 ```go
 NewGenerate().Application()
 ```
 
-生成数据层文件
+#### 生成数据层文件
 
 ```go
 generate.
@@ -1335,17 +1418,21 @@ generate.
 	Database("数据库")
 ```
 
-## 插件注册
+# 插件注册
 
-### 注册类型插件
+## 注册数据类型
 
-包
+`注册的数据类型主要用于代码生成的类型注册，一般情况用不到`
+
+#### import
 
 ```go
 import "github.com/whf-sky/efficient/widget/generate/database/mysql/generate"
 ```
 
-RegisterType `注册mysql对应的golang数据类型，非NULL值的`
+#### RegisterType 
+
+`注册mysql对应的golang数据类型，非NULL值的`
 
 `unsigned 是否有符号`
 
@@ -1359,7 +1446,9 @@ RegisterType `注册mysql对应的golang数据类型，非NULL值的`
 func RegisterType(unsigned bool, mType, gType string, pkgs ...string)
 ```
 
-RegisterNullType `注册mysql对应的golang数据类型，可NULL值的`
+#### RegisterNullType 
+
+`注册mysql对应的golang数据类型，可NULL值的`
 
 `unsigned 是否有符号`
 
@@ -1373,15 +1462,17 @@ RegisterNullType `注册mysql对应的golang数据类型，可NULL值的`
 func RegisterNullType(unsigned bool, mType, gType string, pkgs ...string) 
 ```
 
-### 验证器
+## 注册验证器
 
-包
+#### import
 
 ```go
 import "github.com/whf-sky/efficient/widget/validation"
 ```
 
-RegisterValidation `注册验证器`
+#### RegisterValidation 
+
+`注册验证器`
 
 `name 验证器名称`
 
@@ -1391,15 +1482,17 @@ RegisterValidation `注册验证器`
 func RegisterValidation(name string, validation ValidationHandle)
 ```
 
-### 代码生成器
+## 注册代码生成器
 
-包
+#### import
 
 ```go
 import "github.com/whf-sky/efficient/widget/generate"
 ```
 
-RegisterGenerate `注册生成器`
+#### RegisterGenerate 
+
+`注册生成器`
 
 `driver 数据库驱动`
 
@@ -1409,15 +1502,17 @@ RegisterGenerate `注册生成器`
 func RegisterGenerate(driver string, generate GenerateInterface) 
 ```
 
-### SQL生成器
+## 注册SQL生成器
 
-包
+#### import
 
 ```go
 import "github.com/whf-sky/efficient/widget/database"
 ```
 
-RegisterSQLS `注册SQL生成器`
+#### RegisterSQLS 
+
+`注册SQL生成器`
 
 `driver 数据库驱动`
 
