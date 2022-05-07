@@ -1491,22 +1491,32 @@ int8 uint8 int16 uint16 int uint int32 uint32 int64 uint64 float32 float64 strin
 支持的数据类型 `nil`
 
 
+# 环境变量
 
-
-# 环境变量获取
-
-#### import
+## import
 
 ```go
 import "github.com/whf-sky/efficient"
 ```
 
-#### 获取环境变量 
+## 获取环境变量 
 
 `默认production`
 
 ```go
 efficient.GetEnv()
+```
+
+## 设置系统环境变量 
+
+#### Windows 下设置 EFFICIENT_ENV 的命令为：
+```sh
+$ set EFFICIENT_ENV=test
+```
+
+#### MacOS 或者 Linux 下设置 EFFICIENT_ENV 的命令为：
+```sh
+$ export EFFICIENT_ENV=test
 ```
 
 # 生成器
