@@ -4,7 +4,7 @@ _efficient是基于Golang gin框架编写的web、command富框架。灵活的�
 
 _efficient 主要基于下面的包进行了封装, 基本保留了原有包的用法_
 
-[gin github 地址点击这里](#https://github.com/gin-gonic/gin)
+[gin github 地址点击这里](https://github.com/gin-gonic/gin)
 
 # 目录
 
@@ -190,7 +190,7 @@ efficient.Routers.
 
 `efficient.Context` 用法与gin的`*Context`用法一致。
 
-[gin github 地址点击这里](#https://github.com/gin-gonic/gin)
+[gin github 地址点击这里](https://github.com/gin-gonic/gin)
 
 #### 示例代码
 
