@@ -108,7 +108,6 @@ func (c *Controller) GetController(ctr ControllerInterface) string {
 	if c.controllerName == "" {
 		reflectVal := reflect.ValueOf(ctr)
 		ct := reflect.Indirect(reflectVal).Type()
-		//c.controllerName = ct.PkgPath()+":"+ct.String()+":"+ct.Name()
 		c.controllerName = strings.TrimSuffix(ct.Name(), "Controller")
 	}
 	return c.controllerName

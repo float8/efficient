@@ -21,6 +21,7 @@ _efficient 主要基于下面的包进行了封装, 基本保留了原有包的�
   - [Model](#Model)
   - [Dao](#Dao)
   - [应用](#应用)
+- [数据验证](#数据验证)
 - [环境变量获取](#环境变量获取)
 - [生成器](#生成器)
 - [插件注册](#插件注册)
@@ -28,6 +29,7 @@ _efficient 主要基于下面的包进行了封装, 基本保留了原有包的�
   - [注册验证器](#注册验证器)
   - [注册代码生成器](#注册代码生成器)
   - [注册SQL生成器](#注册SQL生成器)
+- [工具包](#工具包)
 
 # 安装
 
@@ -99,7 +101,7 @@ func (this *TestController) Post(cxt efficient.Context) {
 
 func main(){
   efficient.Routers.Add("/test", &TestController{}, http.MethodGet, http.MethodPost)
-  efficient.WebRun()
+  efficient.Run()
 }
 
 ```
@@ -1330,6 +1332,167 @@ func (d *Dao) Rollback() error
 ```
 
 
+# 数据验证
+
+#### 示例代码
+
+```go
+package main
+
+import (
+	"fmt"
+	"github.com/whf-sky/efficient/widget/validation"
+)
+
+func main() {
+	errs := validation.NewValidation().
+		Validator("num", 101.1, validation.V{"gte": 5.1, "lte": 100.1}, "数量").
+		Validator("num1", 101, validation.V{"gte": 5, "lte": 100}, "数量").
+        Errors()
+
+	fmt.Println(errs)
+}
+```
+
+## 使用
+
+#### import
+
+```go
+import "github.com/whf-sky/efficient/widget/validation"
+```
+
+#### New
+
+`做数据验证前，先对验证器进行实例化`
+
+```go
+validation.NewValidation()
+```
+
+#### Validator
+
+`添加验证规则`
+
+`key 需要验证的数据标识，如：验证数据为用户名，key即可为username`
+
+`data 需要验证的数据`
+
+`validators 验证规则`
+
+`comments 要验证的数据的注释，如：key为id，comment为编号`
+
+```go
+func (v *Validation) Validator(key string, data interface{}, validators V, comments ...string) *Validation 
+```
+
+#### V
+
+`验证规则，底层数据结构为 map[string]interface{}`
+
+`key 为验证规则的英文名称，即验证器`
+
+`value 为规则的数据，规则数据要与验证的数据的类型保持一致，否则验证失败报类型不匹配错误`
+
+```go
+validation.V{"gte": 5.1, "lte": 100.1}
+```
+
+## 验证规则
+
+### eq `等于`
+
+`支持的数据类型`
+
+```
+int8 uint8 int16 uint16 int uint int32 uint32 int64 uint64 float32 float64 string bool
+
+```
+
+### neq `不等于`
+
+`支持的数据类型`
+
+```
+int8 uint8 int16 uint16 int uint int32 uint32 int64 uint64 float32 float64 string bool
+
+```
+
+### gt `大于`
+
+`支持的数据类型`
+
+```
+int8 uint8 int16 uint16 int uint int32 uint32 int64 uint64 float32 float64 string
+
+```
+
+### gte `大于等于`
+
+`支持的数据类型`
+
+```
+int8 uint8 int16 uint16 int uint int32 uint32 int64 uint64 float32 float64 string
+
+```
+
+### lt `小于`
+
+`支持的数据类型`
+
+```
+int8 uint8 int16 uint16 int uint int32 uint32 int64 uint64 float32 float64 string
+
+```
+
+### lte `小于等于`
+
+`支持的数据类型`
+
+```
+int8 uint8 int16 uint16 int uint int32 uint32 int64 uint64 float32 float64 string
+
+```
+
+### in `数据在验证规则数据中`
+
+`验证数据支持的数据类型`
+
+```
+int8 uint8 int16 uint16 int uint int32 uint32 int64 uint64 float32 float64 string
+
+```
+
+`验证规则数据为验证数据的数组形式，如：[]int8`
+
+### in-multi `多个数据在验证规则数据中`
+
+`验证数据和验证规则数据支持的数据类型为下面类型的数组形式，如：[]int8`
+
+```
+int8 uint8 int16 uint16 int uint int32 uint32 int64 uint64 float32 float64 string
+
+```
+
+### empty `空`
+
+支持的数据类型 `string`
+
+### email `邮箱`
+
+支持的数据类型 `string`
+
+### regexp `正则`
+
+支持的数据类型 `string`
+
+### required `必须的`
+
+支持的数据类型 `nil`
+
+
+
+
 # 环境变量获取
 
 #### import
@@ -1521,3 +1684,7 @@ import "github.com/whf-sky/efficient/widget/database"
 ```go
 func RegisterSQLS(driver string, sql SQLInterface) 
 ```
+
+# 工具包
+
+参见 `widget/tools` 包

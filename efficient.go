@@ -10,7 +10,7 @@ type (
 	Middleware = gin.HandlerFunc
 )
 
-func WebRun() {
+func Run() {
 	if !Config.Debug {
 		gin.SetMode(gin.ReleaseMode)
 	}
@@ -23,8 +23,4 @@ func WebRun() {
 	}
 	registerRouters(router)
 	router.Run(Config.Addr)
-}
-
-func CMDRun() {
-
 }

@@ -26,6 +26,7 @@ type Application struct {
 func (a *Application) Execute() {
 	a.dirs()
 	a.config()
+	a.databaseConfig()
 	a.routers()
 	a.service()
 	a.main()
@@ -52,6 +53,40 @@ func (a *Application) config() {
 	public.WriteFile(a.basepath+"/"+a.appdirs["config"]+"/config.go", code)
 }
 
+
+func (a *Application) databaseConfig()  {
+	code := "package config\n\n" +
+		"import (\n\t\"github.com/whf-sky/efficient\"\n\t\"time\"\n)\n\n" +
+		"var DbConfig dbConfig\n\n" +
+		"type dbConfig struct {\n\t" +
+		"driver             string\n\t" +
+		"Addr               string\n\t" +
+		"Port               string\n\t" +
+		"Account            string\n\t" +
+		"Passwd             string\n\t" +
+		"Dbname             string\n\t" +
+		"Charset            string\n\t" +
+		"ConnMaxIdleTime    time.Duration\n\t" +
+		"SetConnMaxLifetime time.Duration\n\t" +
+		"MaxOpenConns       int\n\t" +
+		"MaxIdleConns       int\n}\n\n" +
+		"func init() {\n\t" +
+		"env := efficient.GetEnv()\n\t" +
+		"if env == \"production\" {\n\t\t" +
+		"DbConfig = dbConfig{\n\t\t\tA" +
+		"ddr:               \"127.0.0.1\",\n\t\t\t" +
+		"Port:               \"3306\",\n\t\t\t" +
+		"Account:            \"root\",\n\t\t\t" +
+		"Passwd:             \"123456\",\n\t\t\t" +
+		"Dbname:             \"test\",\n\t\t\t" +
+		"Charset:            \"utf8mb4\",\n\t\t\t" +
+		"SetConnMaxLifetime: time.Minute * 4,\n\t\t\t" +
+		"ConnMaxIdleTime:    time.Minute * 2,\n\t\t\t" +
+		"MaxOpenConns:       5,\n\t\t\t" +
+		"MaxIdleConns:       5,\n\t\t}\n\t}\n}\n"
+	public.WriteFile(a.basepath+"/"+a.appdirs["config"]+"/database.go", code)
+}
+
 func (a *Application) routers() {
 	code := "package config\n\n" +
 		"import (\n\t\"github.com/whf-sky/efficient\"\n\t\"" +
@@ -65,6 +100,7 @@ func (a *Application) routers() {
 	code = strings.ReplaceAll(code, "#service_path#", a.appdirs["service"])
 	public.WriteFile(a.basepath+"/"+a.appdirs["config"]+"/routers.go", code)
 }
+
 
 func (a *Application) service() {
 	code := "package service\n\n" +
