@@ -31,6 +31,7 @@ type SQLInterface interface {
 	InsertQuery(table string, columns []string, valsLen int) (sql string, err error)
 	UpdateQuery(table string, sets []string, where string) (sql string, err error)
 	DeleteQuery(table string, where string) (sql string, err error)
+	SelectQuery(table string, sql string) (string, error)
 }
 
 var sqls = map[string]SQLInterface{}

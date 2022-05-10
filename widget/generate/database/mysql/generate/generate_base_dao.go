@@ -28,7 +28,7 @@ func newGenerateBaseDao(tables []string, path string) *generateBaseDao {
 			"db.SetMaxOpenConns(config.DbConfig.MaxOpenConns) //设置最大打开链接数\n\t\t" +
 			"db.SetMaxIdleConns(config.DbConfig.MaxIdleConns) //设置最大空闲链接\n\t})\n}()\n\n" +
 			"type Dao struct {\n\tdatabase.Dao\n}\n\n" +
-			"func (d *Dao) Init() *Dao {\n\td.SetDb(db)\n\td.DriverName(\"mysql\")\n\treturn d\n}\n",
+			"func (d *Dao) Init(fun func() database.ModelInterface) *Dao {\n\td.SetDb(\"mysql\", db)\n\td.SetModel(fun)\n\treturn d\n}\n",
 	}
 }
 

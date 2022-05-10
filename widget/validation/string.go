@@ -5,7 +5,7 @@ import "regexp"
 func Empty(comment string, data, param interface{}) error {
 	s, ok := data.(string)
 	if !ok {
-		return Error("data_type_nostring_error", comment)
+		return ErrorType(comment)
 	}
 	if s == "" {
 		return Error("empty", comment)
@@ -16,7 +16,7 @@ func Empty(comment string, data, param interface{}) error {
 func Email(comment string, data, param interface{}) error {
 	s, ok := data.(string)
 	if !ok {
-		return Error("data_type_nostring_error", comment)
+		return ErrorType(comment)
 	}
 	pattern := `^[0-9a-z][_.0-9a-z-]{0,31}@([0-9a-z][0-9a-z-]{0,30}[0-9a-z]\.){1,4}[a-z]{2,4}$`
 	reg := regexp.MustCompile(pattern)
@@ -29,11 +29,11 @@ func Email(comment string, data, param interface{}) error {
 func Regexp(comment string, data, param interface{}) error {
 	d, ok := data.(string)
 	if !ok {
-		return Error("data_type_nostring_error", comment)
+		return ErrorType(comment)
 	}
 	p, ok := param.(string)
 	if !ok {
-		return Error("param_type_nostring_error", comment)
+		return ErrorType(comment)
 	}
 	reg := regexp.MustCompile(p)
 	if !reg.MatchString(d) {

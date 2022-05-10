@@ -14,13 +14,14 @@ func Run() {
 	if !Config.Debug {
 		gin.SetMode(gin.ReleaseMode)
 	}
+
+	gin.DefaultWriter = Logger.Out
+	gin.DefaultErrorWriter = Logger.Out
+
 	var router Engine
-	if len(Config.Middleware) > 0 {
-		router = gin.New()
-		router.Use(Config.Middleware...)
-	} else {
-		router = gin.Default()
-	}
+	router = gin.New()
+	router.Use(ginLogger)
+	router.Use(Config.Middleware...)
 	registerRouters(router)
 	router.Run(Config.Addr)
 }

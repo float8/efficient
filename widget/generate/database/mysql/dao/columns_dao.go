@@ -8,7 +8,6 @@ import (
 func NewColumnsDao() *ColumnsDao {
 	dao := &ColumnsDao{}
 	dao.SetModel(func() database.ModelInterface { return model.NewColumns() })
-	dao.DriverName("mysql")
 	return dao
 }
 

@@ -8,7 +8,6 @@ import (
 func NewTablesDao() *TablesDao {
 	userDao := &TablesDao{}
 	userDao.SetModel(func() database.ModelInterface { return model.NewTables() })
-	userDao.DriverName("mysql")
 	return userDao
 }
 

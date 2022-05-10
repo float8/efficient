@@ -3,19 +3,25 @@ package validation
 import (
 	"errors"
 	"fmt"
-	"github.com/whf-sky/efficient"
+	"github.com/whf-sky/efficient/widget/validation/lang"
 )
 
 func Lang(key string) string {
-	if _, ok := efficient.Config.Lang["validation_"+key]; ok {
-		return efficient.Config.Lang["validation_"+key]
+	if _, ok := lang.Lang["v_"+key]; ok {
+		return lang.Lang["v_"+key]
 	}
-	return efficient.Config.Lang["validation_no_lang"]
+	return lang.Lang["v_no_lang"]
 }
 
 func Error(key string, a ...interface{}) error {
 	return errors.New(fmt.Sprintf(Lang(key), a...))
 }
+
+func ErrorType(s ...interface{}) error {
+	return Error("error_type", s...)
+}
+
+
 
 func Required(comment string, data, param interface{}) error {
 	if data != nil {

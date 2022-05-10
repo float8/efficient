@@ -22,6 +22,7 @@ _efficient 主要基于下面的包进行了封装, 基本保留了原有包的�
   - [Dao](#Dao)
   - [应用](#应用)
 - [数据验证](#数据验证)
+- [日志](#日志)
 - [环境变量](#环境变量)
 - [生成器](#生成器)
 - [插件注册](#插件注册)
@@ -543,16 +544,16 @@ var types = map[string]goType{
 		name: "string",
 	},
 	"date": {
-		name: "dtype.Date",
-		pkg:  "github.com/whf-sky/efficient/widget/dtype",
+		name: "database.Date",
+		pkg:  "github.com/whf-sky/efficient/widget/database",
 	},
 	"datetime": {
-		name: "dtype.Time",
-		pkg:  "github.com/whf-sky/efficient/widget/dtype",
+		name: "database.Time",
+		pkg:  "github.com/whf-sky/efficient/widget/database",
 	},
 	"timestamp": {
-		name: "dtype.Time",
-		pkg:  "github.com/whf-sky/efficient/widget/dtype",
+		name: "database.Time",
+		pkg:  "github.com/whf-sky/efficient/widget/database",
 	},
 	"year": {
 		name: "string",
@@ -566,12 +567,12 @@ var types = map[string]goType{
 		pkg:  "github.com/shopspring/decimal",
 	},
 	"bit": {
-		name: "dtype.Bit",
-		pkg:  "github.com/whf-sky/efficient/widget/dtype",
+		name: "database.Bit",
+		pkg:  "github.com/whf-sky/efficient/widget/database",
 	},
 	"bits": {
-		name: "dtype.Bits",
-		pkg:  "github.com/whf-sky/efficient/widget/dtype",
+		name: "database.Bits",
+		pkg:  "github.com/whf-sky/efficient/widget/database",
 	},
 	"char": {
 		name: "string",
@@ -595,8 +596,8 @@ var types = map[string]goType{
 		name: "string",
 	},
 	"set": {
-		name: "dtype.Set",
-		pkg:  "github.com/whf-sky/efficient/widget/dtype",
+		name: "database.Set",
+		pkg:  "github.com/whf-sky/efficient/widget/database",
 	},
 	"tinyint": {
 		name:     "int8",
@@ -640,136 +641,135 @@ var types = map[string]goType{
 
 ```go
 var nullTypes = map[string]goType{
-	"date": {
-		name: "dtype.NullDate",
-		pkg:  "github.com/whf-sky/efficient/widget/dtype",
-	},
-	"datetime": {
-		name: "dtype.NullTime",
-		pkg:  "github.com/whf-sky/efficient/widget/dtype",
-	},
-	"timestamp": {
-		name: "dtype.Time",
-		pkg:  "github.com/whf-sky/efficient/widget/dtype",
-	},
-	"time": {
-		name: "sql.NullString",
-		pkg:  "database/sql",
-	},
-	"year": {
-		name: "sql.NullString",
-		pkg:  "database/sql",
-	},
-	"bit": {
-		name: "dtype.NullBit",
-		pkg:  "github.com/whf-sky/efficient/widget/dtype",
-	},
-	"bits": {
-		name: "dtype.NullBits",
-		pkg:  "github.com/whf-sky/efficient/widget/dtype",
-	},
-	"char": {
-		name: "sql.NullString",
-		pkg:  "database/sql",
-	},
-	"varchar": {
-		name: "sql.NullString",
-		pkg:  "database/sql",
-	},
-	"tinytext": {
-		name: "sql.NullString",
-		pkg:  "database/sql",
-	},
-	"text": {
-		name: "sql.NullString",
-		pkg:  "database/sql",
-	},
-	"mediumtext": {
-		name: "sql.NullString",
-		pkg:  "database/sql",
-	},
-	"longtext": {
-		name: "sql.NullString",
-		pkg:  "database/sql",
-	},
-	"enum": {
-		name: "sql.NullString",
-		pkg:  "database/sql",
-	},
-	"set": {
-		name: "dtype.NullSet",
-		pkg:  "github.com/whf-sky/efficient/widget/dtype",
-	},
-	"double": {
-		name:     "sql.NullFloat64",
-		pkg:      "database/sql",
-	},
-	"float": {
-		name: "sql.NullFloat64",
-		pkg:  "database/sql",
-	},
-	"real": {
-		name: "sql.NullFloat64",
-		pkg:  "database/sql",
-	},
-	"decimal": {
-		name: "decimal.Decimal",
-		pkg:  "github.com/shopspring/decimal",
-	},
-	"numeric": {
-		name: "decimal.Decimal",
-		pkg:  "github.com/shopspring/decimal",
-	},
-	"tinyint": {
-		name:     "dtype.NullInt8",
-		pkg:      "github.com/whf-sky/efficient/widget/dtype",
-		unsigned: goUtype{
-			name:     "dtype.NullUint8",
-			pkg:      "github.com/whf-sky/efficient/widget/dtype",
-		},
-	},
-	"smallint": {
-		name:     "sql.NullInt16",
-		pkg:      "database/sql",
-		unsigned: goUtype{
-			name:     "dtype.NullUint16",
-			pkg:      "github.com/whf-sky/efficient/widget/dtype",
-		},
-	},
-	"mediumint": {
-		name:     "sql.NullInt32",
-		pkg:      "database/sql",
-		unsigned: goUtype{
-			name:     "dtype.NullUint32",
-			pkg:      "github.com/whf-sky/efficient/widget/dtype",
-		},
-	},
-	"int": {
-		name: "sql.NullInt32",
-		pkg:  "database/sql",
-		unsigned: goUtype{
-			name:     "dtype.NullUint32",
-			pkg:      "github.com/whf-sky/efficient/widget/dtype",
-		},
-	},
-	"integer": {
-		name:     "sql.NullInt32",
-		pkg:      "database/sql",
-		unsigned: goUtype{
-			name:     "dtype.NullUint32",
-			pkg:      "github.com/whf-sky/efficient/widget/dtype",
-		},
-	},
-	"bigint": {
-		name: "sql.NullInt64",
-		pkg:  "database/sql",
-		unsigned: goUtype{
-			name:     "dtype.NullUint64",
-			pkg:      "github.com/whf-sky/efficient/widget/dtype",
-		},
-	},
-}
-
+  "date": {
+    name: "database.NullDate",
+    pkg:  "github.com/whf-sky/efficient/widget/database",
+  },
+  "datetime": {
+    name: "database.NullTime",
+    pkg:  "github.com/whf-sky/efficient/widget/database",
+  },
+  "timestamp": {
+    name: "database.Time",
+    pkg:  "github.com/whf-sky/efficient/widget/database",
+  },
+  "time": {
+    name: "sql.NullString",
+    pkg:  "database/sql",
+  },
+  "year": {
+    name: "sql.NullString",
+    pkg:  "database/sql",
+  },
+  "bit": {
+    name: "database.NullBit",
+    pkg:  "github.com/whf-sky/efficient/widget/database",
+  },
+  "bits": {
+    name: "database.NullBits",
+    pkg:  "github.com/whf-sky/efficient/widget/database",
+  },
+  "char": {
+    name: "sql.NullString",
+    pkg:  "database/sql",
+  },
+  "varchar": {
+    name: "sql.NullString",
+    pkg:  "database/sql",
+  },
+  "tinytext": {
+    name: "sql.NullString",
+    pkg:  "database/sql",
+  },
+  "text": {
+    name: "sql.NullString",
+    pkg:  "database/sql",
+  },
+  "mediumtext": {
+    name: "sql.NullString",
+    pkg:  "database/sql",
+  },
+  "longtext": {
+    name: "sql.NullString",
+    pkg:  "database/sql",
+  },
+  "enum": {
+    name: "sql.NullString",
+    pkg:  "database/sql",
+  },
+  "set": {
+    name: "database.NullSet",
+    pkg:  "github.com/whf-sky/efficient/widget/database",
+  },
+  "double": {
+    name:     "sql.NullFloat64",
+    pkg:      "database/sql",
+  },
+  "float": {
+    name: "sql.NullFloat64",
+    pkg:  "database/sql",
+  },
+  "real": {
+    name: "sql.NullFloat64",
+    pkg:  "database/sql",
+  },
+  "decimal": {
+    name: "decimal.Decimal",
+    pkg:  "github.com/shopspring/decimal",
+  },
+  "numeric": {
+    name: "decimal.Decimal",
+    pkg:  "github.com/shopspring/decimal",
+  },
+  "tinyint": {
+    name:     "database.NullInt8",
+    pkg:      "github.com/whf-sky/efficient/widget/database",
+    unsigned: goUtype{
+      name:     "database.NullUint8",
+      pkg:      "github.com/whf-sky/efficient/widget/database",
+    },
+  },
+  "smallint": {
+    name:     "sql.NullInt16",
+    pkg:      "database/sql",
+    unsigned: goUtype{
+      name:     "database.NullUint16",
+      pkg:      "github.com/whf-sky/efficient/widget/database",
+    },
+  },
+  "mediumint": {
+    name:     "sql.NullInt32",
+    pkg:      "database/sql",
+    unsigned: goUtype{
+      name:     "database.NullUint32",
+      pkg:      "github.com/whf-sky/efficient/widget/database",
+    },
+  },
+  "int": {
+    name: "sql.NullInt32",
+    pkg:  "database/sql",
+    unsigned: goUtype{
+      name:     "database.NullUint32",
+      pkg:      "github.com/whf-sky/efficient/widget/database",
+    },
+  },
+  "integer": {
+    name:     "sql.NullInt32",
+    pkg:      "database/sql",
+    unsigned: goUtype{
+      name:     "database.NullUint32",
+      pkg:      "github.com/whf-sky/efficient/widget/database",
+    },
+  },
+  "bigint": {
+    name: "sql.NullInt64",
+    pkg:  "database/sql",
+    unsigned: goUtype{
+      name:     "database.NullUint64",
+      pkg:      "github.com/whf-sky/efficient/widget/database",
+    },
+  },
+  }
 ```
 
 ### 4.注册Model
@@ -849,8 +849,7 @@ var db = func() *sql.DB {
 
 func NewUsersDao(db *sql.DB) *UsersDao {
   d := &UsersDao{}
-  d.SetDb(db)
-  d.DriverName("mysql")
+  d.SetDb("mysql", db)
   d.SetModel(func() database.ModelInterface {
     return model.NewUsers()
   })
@@ -885,8 +884,7 @@ type UsersDao struct {
 ```go
 func NewUsersDao(db *sql.DB) *UsersDao {
   d := &UsersDao{}
-  d.SetDb(db)
-  d.DriverName("mysql")
+  d.SetDb("mysql", db)
   d.SetModel(func() database.ModelInterface {
     return model.NewUsers()
   })
@@ -904,32 +902,37 @@ func NewUsersDao(db *sql.DB) *UsersDao {
 package dao
 
 import (
-	"database/sql"
-	_ "github.com/go-sql-driver/mysql"
-	"github.com/whf-sky/efficient/widget/database"
-	"time"
+  "database/sql"
+  _ "github.com/go-sql-driver/mysql"
+  "github.com/whf-sky/efficient.demo/config"
+  "github.com/whf-sky/efficient/widget/database"
 )
 
-//数据库连接
 var db = func() *sql.DB {
-	return database.NewDb().MysqlDsn("127.0.0.1", "3306", "root", "123456", "test", "utf8mb4").Open(func(db *sql.DB) {
-		db.SetConnMaxIdleTime(time.Minute * 4) //设置最大连接生存时间
-		db.SetMaxOpenConns(5)                  //设置最大打开链接数
-		db.SetMaxIdleConns(5)                  //设置最大空闲链接
-		db.SetConnMaxLifetime(time.Minute * 2) //设置连接最大空闲时间
-	})
+  return database.NewDb().MysqlDsn(
+    config.DbConfig.Addr,
+    config.DbConfig.Port,
+    config.DbConfig.Account,
+    config.DbConfig.Passwd,
+    config.DbConfig.Dbname,
+    config.DbConfig.Charset,
+  ).Open(func(db *sql.DB) {
+    db.SetConnMaxLifetime(config.DbConfig.SetConnMaxLifetime) //设置最大连接生存时间
+    db.SetConnMaxIdleTime(config.DbConfig.ConnMaxIdleTime) //设置连接最大空闲时间
+    db.SetMaxOpenConns(config.DbConfig.MaxOpenConns) //设置最大打开链接数
+    db.SetMaxIdleConns(config.DbConfig.MaxIdleConns) //设置最大空闲链接
+  })
 }()
 
 type Dao struct {
-	database.Dao
-}
-//设置初始化方法，在子结构体实例化时可以调用
-func (d *Dao) Init() *Dao {
-	d.SetDb(db)
-	d.DriverName("mysql")
-	return d
+  database.Dao
 }
 
+func (d *Dao) Init(fun func() database.ModelInterface) *Dao {
+  d.SetDb("mysql", db)
+  d.SetModel(fun)
+  return d
+}
 ```
 
 #### 父Dao的嵌入使用
@@ -944,9 +947,7 @@ import (
 
 func NewUsersDao() *UsersDao {
 	d := &UsersDao{}
-	d.Init().SetModel(func() database.ModelInterface {
-		return model.NewUsers()
-	})
+	d.Init(func() database.ModelInterface {return model.NewUsers()})
 	return d
 }
 
@@ -960,31 +961,36 @@ type UsersDao struct {
 
 ### Insert
 
+```go
+func (d *Dao) Insert() (result sql.Result, err error)
+```
+
 #### 示例代码
 
 ```go
 package main
 
-
 import (
   "fmt"
   "github.com/whf-sky/efficient.demo/application/dao"
   "github.com/whf-sky/efficient.demo/application/model"
+  "math/rand"
+  "strconv"
+  "time"
 )
 
-
 func main()  {
-  model.NewUsers().
-  	SetUsername("zhangsan").
-  	SetPasswd("123456").
-  	SetAge(10)
-  
-  usersDao := dao.NewUsersDao()
-  lastInsertId, err := usersDao.SetData(users).Insert()
-  
-  fmt.Println("Insert:", lastInsertId, err)
-}
+  rand.Seed(time.Now().UnixNano())
+  users := model.NewUsers()
+  users.SetUsername("zhangsan-" + strconv.FormatUint(rand.Uint64(), 10)).
+    SetPasswd("123456").
+    SetAge(10)
 
+  userDao := dao.NewUsersDao()
+  ret,_ := userDao.SetData(users).Insert()
+
+  fmt.Println(ret.LastInsertId())
+}
 ```
 
 #### SetData 
@@ -992,7 +998,7 @@ func main()  {
 `设置数据`
 
 ```go
-usersDao.SetData(users)
+func (d *Dao) SetData(data ...ModelInterface) *Dao
 ```
 
 #### Insert 
@@ -1000,7 +1006,7 @@ usersDao.SetData(users)
 `执行插入操作`
 
 ```go
-usersDao.Insert()
+func (d *Dao) Insert() (result sql.Result, err error)
 ```
 
 ### update
@@ -1034,7 +1040,7 @@ func main()  {
 `设置数据`
 
 ```go
-usersDao.SetData(users)
+func (d *Dao) SetData(data ...ModelInterface) *Dao
 ```
 
 #### Where 
@@ -1042,7 +1048,7 @@ usersDao.SetData(users)
 `设置条件`
 
 ```go
-usersDao.Where("id=?", 1342)
+func (d *Dao) Where(where string, args ...interface{}) *Dao 
 ```
 
 #### Update 
@@ -1050,7 +1056,7 @@ usersDao.Where("id=?", 1342)
 `执行修改操作`
 
 ```go
-usersDao.Update()
+func (d *Dao) Update() (rowsAffected int64, err error) 
 ```
 
 ### Delete
@@ -1080,7 +1086,7 @@ func main() {
 `设置条件`
 
 ```go
-usersDao.Where("id=?", 1342)
+func (d *Dao) Update() (rowsAffected int64, err error) 
 ```
 
 #### Delete 
@@ -1088,7 +1094,7 @@ usersDao.Where("id=?", 1342)
 `执行删除操作`
 
 ```go
-usersDao.Delete()
+func (d *Dao) Delete() (rowsAffected int64, err error) 
 ```
 
 ### QueryRow
@@ -1104,14 +1110,14 @@ import (
 )
 
 func main()  {
-  var (
-    id int64
-    username string
-    passwd string
-  )
+
   userDao := dao.NewUsersDao()
-  userDao.QueryRow("select id,username,passwd from users where id=?", 100)
-  userDao.Row(&id, &username, &passwd)
+  row := userDao.QueryRow("select id,username,passwd from users where id=?", 100)
+  var id int64
+  var username string
+  var passwd string
+  row.Scan(&id, &username, &passwd)
+
   fmt.Println(id, username, passwd)
 }
 
@@ -1122,20 +1128,18 @@ func main()  {
 `单行查询`
 
 ```go
-userDao.QueryRow("select id,username,passwd from users where id=?", 100)
+func (d *Dao) QueryRow(query string, args ...interface{}) *sql.Row 
 ```
 
-#### Row 
+#### Scan 
 
 `获取行结果`
 
 ```go
-var (
-  id int64
-  username string
-  passwd string
-)
-userDao.Row(&id, &username, &passwd)
+var id int64
+var username string
+var passwd string
+row.Scan(&id, &username, &passwd)
 ```
 
 ### Query
@@ -1146,15 +1150,16 @@ userDao.Row(&id, &username, &passwd)
 package main
 
 import (
-	"fmt"
-	"github.com/whf-sky/efficient.demo/application/dao"
+  "fmt"
+  "github.com/whf-sky/efficient.demo/application/dao"
 )
 
 func main()  {
-	userDao := dao.NewUsersDao()
-	userDao.Query("select id,username,passwd from users where passwd=?", "123")
+  userDao := dao.NewUsersDao()
+  result := userDao.Query("select id,username,passwd from users where passwd=?", "123")
+  rows, err := result.ToModels()
+  fmt.Println(rows, err)
 }
-
 ```
 
 #### Query 
@@ -1162,7 +1167,7 @@ func main()  {
 `执行多行查询`
 
 ```go
-userDao.Query("select id,username,passwd from users where passwd=?", "123")
+func (d *Dao) Query(query string, args ...interface{}) *query 
 ```
 
 #### Rows 
@@ -1170,43 +1175,42 @@ userDao.Query("select id,username,passwd from users where passwd=?", "123")
 `原生获取多行数据`
 
 ```go
-rows, err := userDao.Rows()
+func (q *query) Rows() (*sql.Rows, error) 
 ```
 
 `Rows 示例代码`
 
 ```go
-  rows, err := userDao.Rows()
-  defer func() {
-    err := rows.Close()
-    if err != nil {
-    	fmt.Println(err)
-    }
-  }()
+rows, err := result.Rows()
+defer func() {
+  err := rows.Close()
   if err != nil {
     fmt.Println(err)
   }
-  if err != nil {
-    fmt.Println(err)
-  }
-  result := []map[string]interface{}{}
-  for rows.Next() {
-    var id int64
-    var username string
-    var passwd string
-    rows.Scan(&id, &username, &passwd)
-    result = append(result, map[string]interface{}{
+}()
+if err != nil {
+  fmt.Println(err)
+}
+if err != nil {
+  fmt.Println(err)
+}
+ret := []map[string]interface{}{}
+for rows.Next() {
+  var id int64
+  var username string
+  var passwd string
+  rows.Scan(&id, &username, &passwd)
+  ret = append(ret, map[string]interface{}{
     "id":id,
     "username":username,
     "passwd":passwd,
-    })
-  }
-  err = rows.Close()
-  if err != nil {
-    fmt.Println(err)
-  }
-  
-  fmt.Println(result)
+  })
+}
+err = rows.Close()
+if err != nil {
+  fmt.Println(err)
+}
+fmt.Println("rows=============", ret)
 ```
 
 #### ToMaps 
@@ -1214,7 +1218,7 @@ rows, err := userDao.Rows()
 `把结果集放入 []map[string]interface{}`
 
 ```go
-rows, err := userDao.ToMaps()
+func (q *query) ToMaps() (result []map[string]interface{}, err error)
 ```
 
 #### ToMap 
@@ -1224,7 +1228,7 @@ rows, err := userDao.ToMaps()
 `使用Query()获取单行数据一定要加limit 1`
 
 ```go
-row, err := userDao.ToMap()
+func (q *query) ToMap() (result map[string]interface{}, err error)
 ```
 
 #### ToModels 
@@ -1232,7 +1236,7 @@ row, err := userDao.ToMap()
 `把结果集放入 []ModelInterface`
 
 ```go
-rows, err := userDao.ToModels()
+func (q *query) ToModels() (models []ModelInterface, err error)
 ```
 
 #### ToModel 
@@ -1242,7 +1246,7 @@ rows, err := userDao.ToModels()
 `使用Query()获取单行数据一定要加limit 1`
 
 ```go
-row, err := userDao.ToModel()
+func (q *query) ToModel() (model ModelInterface, err error) 
 ```
 
 ### Exec
@@ -1489,6 +1493,68 @@ int8 uint8 int16 uint16 int uint int32 uint32 int64 uint64 float32 float64 strin
 ### required `必须的`
 
 支持的数据类型 `nil`
+
+
+# 日志
+
+使用的是日志插件logrus,对外暴露的`efficient.Log`,错误级别调用的方法都与logrus一致
+
+https://github.com/sirupsen/logrus
+
+示例代码
+
+```go
+package main
+
+import (
+  "github.com/sirupsen/logrus"
+  "github.com/whf-sky/efficient"
+)
+
+func main() {
+  efficient.Log.WithFields(logrus.Fields{
+    "id":"1",
+    "username":"zhangsan",
+  }).Info("ok")
+  efficient.Log.Error("err")
+}
+```
+
+## import
+
+```go
+import "github.com/whf-sky/efficient"
+```
+
+## Logger的设置
+
+```go
+package config
+
+import (
+	"github.com/sirupsen/logrus"
+	"github.com/whf-sky/efficient"
+)
+
+func init()  {
+	env := efficient.GetEnv()
+	if env == "production" {
+		efficient.SetLogger(func(logger *logrus.Logger, log *logrus.Entry) {
+			logger.SetReportCaller(false)
+			log = logrus.NewEntry(logger)
+		})
+	}
+}
+```
+
+#### SetLogger
+
+可对`*logrus.Logger`进行设置，对`*logrus.Entry`进行初始化
+
+```go
+func SetLogger(fun func(logger *logrus.Logger, log *logrus.Entry))
+```
+
 
 
 # 环境变量

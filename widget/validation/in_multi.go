@@ -37,7 +37,7 @@ func InMulti(comment string, data, params interface{}) error {
 func InMultiInt8(comment string, data []int8, params interface{}) error {
 	p, ok := params.([]int8)
 	if !ok {
-		return Error("param_type_error", comment)
+		return ErrorType(comment)
 	}
 	dmap := map[int8]bool{}
 	for _, v := range data {
@@ -60,7 +60,7 @@ func InMultiInt8(comment string, data []int8, params interface{}) error {
 func InMultiUint8(comment string, data []uint8, params interface{}) error {
 	p, ok := params.([]uint8)
 	if !ok {
-		return Error("param_type_error", comment)
+		return ErrorType(comment)
 	}
 
 	dmap := map[uint8]bool{}
@@ -84,7 +84,7 @@ func InMultiUint8(comment string, data []uint8, params interface{}) error {
 func InMultiInt16(comment string, data []int16, params interface{}) error {
 	p, ok := params.([]int16)
 	if !ok {
-		return Error("param_type_error", comment)
+		return ErrorType(comment)
 	}
 	dmap := map[int16]bool{}
 	for _, v := range data {
@@ -107,7 +107,7 @@ func InMultiInt16(comment string, data []int16, params interface{}) error {
 func InMultiUint16(comment string, data []uint16, params interface{}) error {
 	p, ok := params.([]uint16)
 	if !ok {
-		return Error("param_type_error", comment)
+		return ErrorType(comment)
 	}
 
 	dmap := map[uint16]bool{}
@@ -132,7 +132,7 @@ func InMultiUint16(comment string, data []uint16, params interface{}) error {
 func InMultiInt32(comment string, data []int32, params interface{}) error {
 	p, ok := params.([]int32)
 	if !ok {
-		return Error("param_type_error", comment)
+		return ErrorType(comment)
 	}
 	dmap := map[int32]bool{}
 	for _, v := range data {
@@ -155,7 +155,7 @@ func InMultiInt32(comment string, data []int32, params interface{}) error {
 func InMultiUint32(comment string, data []uint32, params interface{}) error {
 	p, ok := params.([]uint32)
 	if !ok {
-		return Error("param_type_error", comment)
+		return ErrorType(comment)
 	}
 
 	dmap := map[uint32]bool{}
@@ -179,7 +179,7 @@ func InMultiUint32(comment string, data []uint32, params interface{}) error {
 func InMultiInt(comment string, data []int, params interface{}) error {
 	p, ok := params.([]int)
 	if !ok {
-		return Error("param_type_error", comment)
+		return ErrorType(comment)
 	}
 
 	dmap := map[int]bool{}
@@ -203,7 +203,7 @@ func InMultiInt(comment string, data []int, params interface{}) error {
 func InMultiUint(comment string, data []uint, params interface{}) error {
 	p, ok := params.([]uint)
 	if !ok {
-		return Error("param_type_error", comment)
+		return ErrorType(comment)
 	}
 
 	dmap := map[uint]bool{}
@@ -227,7 +227,7 @@ func InMultiUint(comment string, data []uint, params interface{}) error {
 func InMultiInt64(comment string, data []int64, params interface{}) error {
 	p, ok := params.([]int64)
 	if !ok {
-		return Error("param_type_error", comment)
+		return ErrorType(comment)
 	}
 
 	dmap := map[int64]bool{}
@@ -251,7 +251,7 @@ func InMultiInt64(comment string, data []int64, params interface{}) error {
 func InMultiUint64(comment string, data []uint64, params interface{}) error {
 	p, ok := params.([]uint64)
 	if !ok {
-		return Error("param_type_error", comment)
+		return ErrorType(comment)
 	}
 
 	dmap := map[uint64]bool{}
@@ -275,7 +275,7 @@ func InMultiUint64(comment string, data []uint64, params interface{}) error {
 func InMultiFloat32(comment string, data []float32, params interface{}) error {
 	p, ok := params.([]float32)
 	if !ok {
-		return Error("param_type_error", comment)
+		return ErrorType(comment)
 	}
 
 	dmap := map[float32]bool{}
@@ -299,7 +299,7 @@ func InMultiFloat32(comment string, data []float32, params interface{}) error {
 func InMultiFloat64(comment string, data []float64, params interface{}) error {
 	p, ok := params.([]float64)
 	if !ok {
-		return Error("param_type_error", comment)
+		return ErrorType(comment)
 	}
 
 	dmap := map[float64]bool{}
@@ -323,7 +323,7 @@ func InMultiFloat64(comment string, data []float64, params interface{}) error {
 func InMultiString(comment string, data []string, params interface{}) error {
 	p, ok := params.([]string)
 	if !ok {
-		return Error("param_type_error", comment)
+		return ErrorType(comment)
 	}
 
 	dmap := map[string]bool{}
@@ -343,6 +343,8 @@ func InMultiString(comment string, data []string, params interface{}) error {
 	}
 	return nil
 }
+
+
 
 func InMultiError(comment, data string) error {
 	return Error("in-multi", comment, data)

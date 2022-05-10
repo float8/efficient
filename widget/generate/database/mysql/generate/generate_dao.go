@@ -13,7 +13,7 @@ func newGenerateDao(modelPath , pkg, tableName string) *generateDao {
 		sections: map[string]string{
 			"package":   "package #package#",
 			"import":    "import (\n\t\"#modelimport#\"\n\t\"github.com/whf-sky/efficient/widget/database\"\n)",
-			"new":       "func New#model#Dao() *#model#Dao {\n\td := &#model#Dao{}\n\td.Init().SetModel(func() database.ModelInterface {\n\t\treturn model.New#model#()\n\t})\n\treturn d\n}",
+			"new":       "func New#model#Dao() *#model#Dao {\n\td := &#model#Dao{}\n\td.Init(func() database.ModelInterface {return model.New#model#()})\n\treturn d\n}",
 			"struct":   "type #model#Dao struct {\n\tDao\n}",
 		},
 		sectionsOrder:     []string{"package", "import", "new", "struct"},

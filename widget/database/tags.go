@@ -3,7 +3,6 @@ package database
 import (
 	"database/sql"
 	"github.com/shopspring/decimal"
-	"github.com/whf-sky/efficient/widget/dtype"
 	"github.com/whf-sky/efficient/widget/tools/numeric"
 	"github.com/whf-sky/efficient/widget/validation"
 	"math"
@@ -112,29 +111,29 @@ func formattingDefault(tags Tags) interface{} {
 		}
 		return numeric.Bin2dec(s[2:])
 	case "set":
-		var set dtype.Set
+		var set Set
 		_ = set.Scan([]byte(s))
 		return set
 	case "date":
-		var date dtype.Date
+		var date Date
 		_ = date.Scan([]byte(s))
 		return date
 	case "datetime", "timestamp":
-		var datetime dtype.Time
+		var datetime Time
 		_ = datetime.Scan([]byte(s))
 		return datetime
 	case "tinyint":
 		if tags.Unsigned {
-			var tinyint dtype.NullUint8
+			var tinyint NullUint8
 			_ = tinyint.Scan([]byte(s))
 			return tinyint
 		}
-		var tinyint dtype.NullInt8
+		var tinyint NullInt8
 		_ = tinyint.Scan([]byte(s))
 		return tinyint
 	case "smallint":
 		if tags.Unsigned {
-			var smallint dtype.NullUint16
+			var smallint NullUint16
 			_ = smallint.Scan([]byte(s))
 			return smallint
 		}
@@ -143,7 +142,7 @@ func formattingDefault(tags Tags) interface{} {
 		return smallint
 	case "mediumint", "int", "integer":
 		if tags.Unsigned {
-			var num dtype.NullUint32
+			var num NullUint32
 			_ = num.Scan([]byte(s))
 			return num
 		}
@@ -152,7 +151,7 @@ func formattingDefault(tags Tags) interface{} {
 		return num
 	case "bigint":
 		if tags.Unsigned {
-			var num dtype.NullUint64
+			var num NullUint64
 			_ = num.Scan([]byte(s))
 			return num
 		}

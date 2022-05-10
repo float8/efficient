@@ -25,18 +25,16 @@ type Generate struct {
 
 func (g *Generate) queryTables() *Generate {
 	tablesDao := dao.NewTablesDao()
-	tablesDao.SetDb(g.db)
+	tablesDao.SetDb("mysql", g.db)
 	g.tables = tablesDao.QueryTables(g.dbname)
 	return g
 }
 
 func (g *Generate) queryColumns(dbname string, tablename string) []database.ModelInterface {
 	columnsDao := dao.NewColumnsDao()
-	columnsDao.SetDb(g.db)
+	columnsDao.SetDb("mysql", g.db)
 	return columnsDao.QueryColumns(dbname, tablename)
 }
-
-
 
 func (g *Generate) baseModel() *Generate {
 	var code string
@@ -72,7 +70,6 @@ func (g *Generate) dao() *Generate {
 		path := g.daoPath + "/" + strings.ToLower(table) + "_dao.go"
 		public.WriteFile(path, code)
 	}
-
 	return g
 }
 

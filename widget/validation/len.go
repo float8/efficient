@@ -5,11 +5,11 @@ type lenCompareFunc func(d, p int) (string, bool)
 func lenCompare(comment string, data, param interface{}, clFunc lenCompareFunc) error {
 	d, ok := data.(string)
 	if !ok {
-		return Error("data_type_length_error", comment)
+		return ErrorType(comment)
 	}
 	p, ok := param.(int)
 	if !ok {
-		return Error("param_type_noint_error", comment)
+		return ErrorType(comment)
 	}
 	if key, ok := clFunc(len(d), p); !ok {
 		return Error(key, comment, p)

@@ -26,6 +26,7 @@ type Application struct {
 func (a *Application) Execute() {
 	a.dirs()
 	a.config()
+	a.loggerConfig()
 	a.databaseConfig()
 	a.routers()
 	a.service()
@@ -51,6 +52,25 @@ func (a *Application) config() {
 		"\n\t\tefficient.Config.Addr = \":80\"\n\t\t" +
 		"efficient.Config.Debug = true\n\t}\n}\n"
 	public.WriteFile(a.basepath+"/"+a.appdirs["config"]+"/config.go", code)
+}
+
+func (a *Application) loggerConfig() {
+	code := "package config\n\n" +
+		"import (\n\t\"" +
+		"github.com/gin-gonic/gin\"\n\t\"" +
+		"github.com/sirupsen/logrus\"\n\t\"" +
+		"github.com/whf-sky/efficient\"\n\t\"" +
+		"os\"\n)\n\n" +
+		"func init()  {\n\t" +
+		"env := efficient.GetEnv()\n\t" +
+		"if env == \"production\" {\n\t\t" +
+		"gin.DefaultWriter = os.Stdout\n\t\t" +
+		"gin.DefaultErrorWriter = os.Stderr\n\t\t" +
+		"efficient.SetLogger(func(logger *logrus.Logger, log *logrus.Entry) {\n\t\t\t" +
+		"logger.SetReportCaller(false)\n\t\t\t" +
+		"log = logrus.NewEntry(logger)\n\t\t\t" +
+		"logger.Out = os.Stdout\n\t\t})\n\t}\n}"
+	public.WriteFile(a.basepath+"/"+a.appdirs["config"]+"/logger.go", code)
 }
 
 

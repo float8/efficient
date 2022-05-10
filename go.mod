@@ -5,6 +5,7 @@ go 1.17
 require (
 	github.com/gin-gonic/gin v1.7.7
 	github.com/shopspring/decimal v1.3.1
+	github.com/sirupsen/logrus v1.8.1
 )
 
 require (

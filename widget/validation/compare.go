@@ -2,7 +2,7 @@ package validation
 
 func TypeCompare(comment string, t1, t2 interface{}) error {
 	if DataType(t1) != DataType(t2) {
-		return Error("param_type_error", comment)
+		return ErrorType(comment)
 	}
 	return nil
 }

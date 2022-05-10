@@ -1,19 +1,16 @@
 package efficient
 
-import (
-	"github.com/whf-sky/efficient/widget/lang"
-)
+type L map[string]string
 
 type config struct {
 	Addr       string
 	Middleware []Middleware
 	Debug      bool
 	AppName    string
-	Lang       lang.Lang
+	Lang       L
 }
 
 var Config  = config{
 	AppName: "efficient",
 	Debug:   true,
-	Lang:    lang.ZH,
 }

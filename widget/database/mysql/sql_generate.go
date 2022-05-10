@@ -19,22 +19,21 @@ func NewMysql() *Mysql {
 	}
 }
 
-func (m *Mysql) InsertQuery(table string, columns []string, valsLen int) (sql string, err error) {
-	clmsLen := len(columns)
-	if clmsLen == 0 {
-		return "", errors.New("The columns values does not exist!")
+func (m *Mysql) InsertQuery(table string, columns []string, vLen int) (sql string, err error) {
+	cLen := len(columns)
+	if cLen == 0 {
+		return "", errors.New("the columns does not exist")
 	}
-	vals := "(" + strings.Repeat("?,", clmsLen-1) + "?)"
+	vals := "(" + strings.Repeat("?,", cLen-1) + "?)"
 	m.insertQuery = strings.Replace(m.insertQuery, "#table#", table, 1)
 	m.insertQuery = strings.Replace(m.insertQuery, "#columns#", "(`"+strings.Join(columns, "`,`")+"`)", 1)
-	m.insertQuery = strings.Replace(m.insertQuery, "#vals#", strings.Repeat(vals+",", valsLen/clmsLen-1)+vals, 1)
+	m.insertQuery = strings.Replace(m.insertQuery, "#vals#", strings.Repeat(vals+",", vLen/cLen-1)+vals, 1)
 	return m.insertQuery, nil
 }
 
 func (m *Mysql) UpdateQuery(table string, sets []string, where string) (sql string, err error) {
-	slen := len(sets)
-	if slen == 0 {
-		return "", errors.New("The set does not exist!")
+	if len(sets) == 0 {
+		return "", errors.New("the set does not exist")
 	}
 	if where != "" {
 		where = " where " + where
@@ -52,4 +51,8 @@ func (m *Mysql) DeleteQuery(table string, where string) (sql string, err error) 
 	m.deleteQuery = strings.Replace(m.deleteQuery, "#table#", table, 1)
 	m.deleteQuery = strings.Replace(m.deleteQuery, "#where#", where, 1)
 	return m.deleteQuery, nil
+}
+
+func (m *Mysql) SelectQuery(table string, sql string) (string, error) {
+	return strings.Replace(sql, "[table]", table, 1), nil
 }

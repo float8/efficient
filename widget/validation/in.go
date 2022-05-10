@@ -37,7 +37,7 @@ func In(comment string, data, params interface{}) error {
 func InInt8(comment string, data int8, params interface{}) error {
 	p, ok := params.([]int8)
 	if !ok {
-		return Error("param_type_error", comment)
+		return ErrorType(comment)
 	}
 	for _, v := range p {
 		if data == v {
@@ -50,7 +50,7 @@ func InInt8(comment string, data int8, params interface{}) error {
 func InUint8(comment string, data uint8, params interface{}) error {
 	p, ok := params.([]uint8)
 	if !ok {
-		return Error("param_type_error", comment)
+		return ErrorType(comment)
 	}
 	for _, v := range p {
 		if data == v {
@@ -63,7 +63,7 @@ func InUint8(comment string, data uint8, params interface{}) error {
 func InInt16(comment string, data int16, params interface{}) error {
 	p, ok := params.([]int16)
 	if !ok {
-		return Error("param_type_error", comment)
+		return ErrorType(comment)
 	}
 	for _, v := range p {
 		if data == v {
@@ -76,7 +76,7 @@ func InInt16(comment string, data int16, params interface{}) error {
 func InUint16(comment string, data uint16, params interface{}) error {
 	p, ok := params.([]uint16)
 	if !ok {
-		return Error("param_type_error", comment)
+		return ErrorType(comment)
 	}
 	for _, v := range p {
 		if data == v {
@@ -89,7 +89,7 @@ func InUint16(comment string, data uint16, params interface{}) error {
 func InInt32(comment string, data int32, params interface{}) error {
 	p, ok := params.([]int32)
 	if !ok {
-		return Error("param_type_error", comment)
+		return ErrorType(comment)
 	}
 	for _, v := range p {
 		if data == v {
@@ -102,7 +102,7 @@ func InInt32(comment string, data int32, params interface{}) error {
 func InUint32(comment string, data uint32, params interface{}) error {
 	p, ok := params.([]uint32)
 	if !ok {
-		return Error("param_type_error", comment)
+		return ErrorType(comment)
 	}
 	for _, v := range p {
 		if data == v {
@@ -115,7 +115,7 @@ func InUint32(comment string, data uint32, params interface{}) error {
 func InInt(comment string, data int, params interface{}) error {
 	p, ok := params.([]int)
 	if !ok {
-		return Error("param_type_error", comment)
+		return ErrorType(comment)
 	}
 	for _, v := range p {
 		if data == v {
@@ -128,7 +128,7 @@ func InInt(comment string, data int, params interface{}) error {
 func InUint(comment string, data uint, params interface{}) error {
 	p, ok := params.([]uint)
 	if !ok {
-		return Error("param_type_error", comment)
+		return ErrorType(comment)
 	}
 	for _, v := range p {
 		if data == v {
@@ -141,7 +141,7 @@ func InUint(comment string, data uint, params interface{}) error {
 func InInt64(comment string, data int64, params interface{}) error {
 	p, ok := params.([]int64)
 	if !ok {
-		return Error("param_type_error", comment)
+		return ErrorType(comment)
 	}
 	for _, v := range p {
 		if data == v {
@@ -154,7 +154,7 @@ func InInt64(comment string, data int64, params interface{}) error {
 func InUint64(comment string, data uint64, params interface{}) error {
 	p, ok := params.([]uint64)
 	if !ok {
-		return Error("param_type_error", comment)
+		return ErrorType(comment)
 	}
 	for _, v := range p {
 		if data == v {
@@ -167,7 +167,7 @@ func InUint64(comment string, data uint64, params interface{}) error {
 func InFloat32(comment string, data float32, params interface{}) error {
 	p, ok := params.([]float32)
 	if !ok {
-		return Error("param_type_error", comment)
+		return ErrorType(comment)
 	}
 	for _, v := range p {
 		if data == v {
@@ -180,7 +180,7 @@ func InFloat32(comment string, data float32, params interface{}) error {
 func InFloat64(comment string, data float64, params interface{}) error {
 	p, ok := params.([]float64)
 	if !ok {
-		return Error("param_type_error", comment)
+		return ErrorType(comment)
 	}
 	for _, v := range p {
 		if data == v {
@@ -193,7 +193,7 @@ func InFloat64(comment string, data float64, params interface{}) error {
 func InString(comment, data string, params interface{}) error {
 	p, ok := params.([]string)
 	if !ok {
-		return Error("param_type_error", comment)
+		return ErrorType(comment)
 	}
 	for _, v := range p {
 		if data == v {
