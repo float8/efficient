@@ -1501,22 +1501,31 @@ int8 uint8 int16 uint16 int uint int32 uint32 int64 uint64 float32 float64 strin
 
 https://github.com/sirupsen/logrus
 
+gin的 `gin.DefaultWriter` 和 `gin.DefaultErrorWriter` 可以分别设置
+
 示例代码
 
 ```go
-package main
+package config
 
 import (
+  "github.com/gin-gonic/gin"
   "github.com/sirupsen/logrus"
   "github.com/whf-sky/efficient"
+  "os"
 )
 
-func main() {
-  efficient.Log.WithFields(logrus.Fields{
-    "id":"1",
-    "username":"zhangsan",
-  }).Info("ok")
-  efficient.Log.Error("err")
+func init()  {
+  env := efficient.GetEnv()
+  if env == "production" {
+    gin.DefaultWriter = os.Stdout
+    gin.DefaultErrorWriter = os.Stderr
+    efficient.SetLogger(func(logger *logrus.Logger, log *logrus.Entry) {
+      logger.SetReportCaller(false)
+      log = logrus.NewEntry(logger)
+      logger.Out = os.Stdout
+    })
+  }
 }
 ```
 
