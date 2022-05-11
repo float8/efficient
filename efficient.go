@@ -23,5 +23,8 @@ func Run() {
 	router.Use(ginLogger)
 	router.Use(Config.Middleware...)
 	registerRouters(router)
-	router.Run(Config.Addr)
+
+	if err := router.Run(Config.Addr); err != nil {
+		Log.Fatal(err)
+	}
 }

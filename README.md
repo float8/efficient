@@ -118,8 +118,8 @@ package main
 
 import (
 	_ "github.com/go-sql-driver/mysql"
-	"github.com/whf-sky/efficient/widget/database"
-	"github.com/whf-sky/efficient/widget/generate"
+	"github.com/whf-sky/efficient/database"
+	"github.com/whf-sky/efficient/generate"
 )
 
 func main() {
@@ -253,7 +253,7 @@ package model
 
 import (
 	"encoding/json"
-	"github.com/whf-sky/efficient/widget/database"
+	"github.com/whf-sky/efficient/database"
 )
 
 //实例化model
@@ -545,15 +545,15 @@ var types = map[string]goType{
 	},
 	"date": {
 		name: "database.Date",
-		pkg:  "github.com/whf-sky/efficient/widget/database",
+		pkg:  "github.com/whf-sky/efficient/database",
 	},
 	"datetime": {
 		name: "database.Time",
-		pkg:  "github.com/whf-sky/efficient/widget/database",
+		pkg:  "github.com/whf-sky/efficient/database",
 	},
 	"timestamp": {
 		name: "database.Time",
-		pkg:  "github.com/whf-sky/efficient/widget/database",
+		pkg:  "github.com/whf-sky/efficient/database",
 	},
 	"year": {
 		name: "string",
@@ -568,11 +568,11 @@ var types = map[string]goType{
 	},
 	"bit": {
 		name: "database.Bit",
-		pkg:  "github.com/whf-sky/efficient/widget/database",
+		pkg:  "github.com/whf-sky/efficient/database",
 	},
 	"bits": {
 		name: "database.Bits",
-		pkg:  "github.com/whf-sky/efficient/widget/database",
+		pkg:  "github.com/whf-sky/efficient/database",
 	},
 	"char": {
 		name: "string",
@@ -597,7 +597,7 @@ var types = map[string]goType{
 	},
 	"set": {
 		name: "database.Set",
-		pkg:  "github.com/whf-sky/efficient/widget/database",
+		pkg:  "github.com/whf-sky/efficient/database",
 	},
 	"tinyint": {
 		name:     "int8",
@@ -643,15 +643,15 @@ var types = map[string]goType{
 var nullTypes = map[string]goType{
   "date": {
     name: "database.NullDate",
-    pkg:  "github.com/whf-sky/efficient/widget/database",
+    pkg:  "github.com/whf-sky/efficient/database",
   },
   "datetime": {
     name: "database.NullTime",
-    pkg:  "github.com/whf-sky/efficient/widget/database",
+    pkg:  "github.com/whf-sky/efficient/database",
   },
   "timestamp": {
     name: "database.Time",
-    pkg:  "github.com/whf-sky/efficient/widget/database",
+    pkg:  "github.com/whf-sky/efficient/database",
   },
   "time": {
     name: "sql.NullString",
@@ -663,11 +663,11 @@ var nullTypes = map[string]goType{
   },
   "bit": {
     name: "database.NullBit",
-    pkg:  "github.com/whf-sky/efficient/widget/database",
+    pkg:  "github.com/whf-sky/efficient/database",
   },
   "bits": {
     name: "database.NullBits",
-    pkg:  "github.com/whf-sky/efficient/widget/database",
+    pkg:  "github.com/whf-sky/efficient/database",
   },
   "char": {
     name: "sql.NullString",
@@ -699,7 +699,7 @@ var nullTypes = map[string]goType{
   },
   "set": {
     name: "database.NullSet",
-    pkg:  "github.com/whf-sky/efficient/widget/database",
+    pkg:  "github.com/whf-sky/efficient/database",
   },
   "double": {
     name:     "sql.NullFloat64",
@@ -723,10 +723,10 @@ var nullTypes = map[string]goType{
   },
   "tinyint": {
     name:     "database.NullInt8",
-    pkg:      "github.com/whf-sky/efficient/widget/database",
+    pkg:      "github.com/whf-sky/efficient/database",
     unsigned: goUtype{
       name:     "database.NullUint8",
-      pkg:      "github.com/whf-sky/efficient/widget/database",
+      pkg:      "github.com/whf-sky/efficient/database",
     },
   },
   "smallint": {
@@ -734,7 +734,7 @@ var nullTypes = map[string]goType{
     pkg:      "database/sql",
     unsigned: goUtype{
       name:     "database.NullUint16",
-      pkg:      "github.com/whf-sky/efficient/widget/database",
+      pkg:      "github.com/whf-sky/efficient/database",
     },
   },
   "mediumint": {
@@ -742,7 +742,7 @@ var nullTypes = map[string]goType{
     pkg:      "database/sql",
     unsigned: goUtype{
       name:     "database.NullUint32",
-      pkg:      "github.com/whf-sky/efficient/widget/database",
+      pkg:      "github.com/whf-sky/efficient/database",
     },
   },
   "int": {
@@ -750,7 +750,7 @@ var nullTypes = map[string]goType{
     pkg:  "database/sql",
     unsigned: goUtype{
       name:     "database.NullUint32",
-      pkg:      "github.com/whf-sky/efficient/widget/database",
+      pkg:      "github.com/whf-sky/efficient/database",
     },
   },
   "integer": {
@@ -758,7 +758,7 @@ var nullTypes = map[string]goType{
     pkg:      "database/sql",
     unsigned: goUtype{
       name:     "database.NullUint32",
-      pkg:      "github.com/whf-sky/efficient/widget/database",
+      pkg:      "github.com/whf-sky/efficient/database",
     },
   },
   "bigint": {
@@ -766,7 +766,7 @@ var nullTypes = map[string]goType{
     pkg:  "database/sql",
     unsigned: goUtype{
       name:     "database.NullUint64",
-      pkg:      "github.com/whf-sky/efficient/widget/database",
+      pkg:      "github.com/whf-sky/efficient/database",
     },
   },
   }
@@ -789,7 +789,7 @@ database.RegisterModel(NewUsers())
 ```go
 package model
 
-import "github.com/whf-sky/efficient/widget/database"
+import "github.com/whf-sky/efficient/database"
 
 type Model struct {
   database.Model
@@ -833,7 +833,7 @@ import (
   "database/sql"
   _ "github.com/go-sql-driver/mysql"
   "github.com/whf-sky/efficient.demo/application/model"
-  "github.com/whf-sky/efficient/widget/database"
+  "github.com/whf-sky/efficient/database"
   "time"
 )
 
@@ -905,7 +905,7 @@ import (
   "database/sql"
   _ "github.com/go-sql-driver/mysql"
   "github.com/whf-sky/efficient.demo/config"
-  "github.com/whf-sky/efficient/widget/database"
+  "github.com/whf-sky/efficient/database"
 )
 
 var db = func() *sql.DB {
@@ -942,7 +942,7 @@ package dao
 
 import (
 	"efficient.demo/application/model"
-	"github.com/whf-sky/efficient/widget/database"
+	"github.com/whf-sky/efficient/database"
 )
 
 func NewUsersDao() *UsersDao {
@@ -1345,7 +1345,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/whf-sky/efficient/widget/validation"
+	"github.com/whf-sky/efficient/validation"
 )
 
 func main() {
@@ -1363,7 +1363,7 @@ func main() {
 #### import
 
 ```go
-import "github.com/whf-sky/efficient/widget/validation"
+import "github.com/whf-sky/efficient/validation"
 ```
 
 #### New
@@ -1616,15 +1616,15 @@ generate.SetDb("mysql", db).Database("test")
 
 `github.com/go-sql-driver/mysql mysql连接驱动包`
 
-`github.com/whf-sky/efficient/widget/database 数据层包`
+`github.com/whf-sky/efficient/database 数据层包`
 
-`github.com/whf-sky/efficient/widget/generate 生成器的包`
+`github.com/whf-sky/efficient/generate 生成器的包`
 
 ```go
 import (
 	_ "github.com/go-sql-driver/mysql"
-	"github.com/whf-sky/efficient/widget/database"
-	"github.com/whf-sky/efficient/widget/generate"
+	"github.com/whf-sky/efficient/database"
+	"github.com/whf-sky/efficient/generate"
 )
 ```
 
@@ -1675,7 +1675,7 @@ generate.
 #### import
 
 ```go
-import "github.com/whf-sky/efficient/widget/generate/database/mysql/generate"
+import "github.com/whf-sky/efficient/generate/database/mysql/generate"
 ```
 
 #### RegisterType 
@@ -1715,7 +1715,7 @@ func RegisterNullType(unsigned bool, mType, gType string, pkgs ...string)
 #### import
 
 ```go
-import "github.com/whf-sky/efficient/widget/validation"
+import "github.com/whf-sky/efficient/validation"
 ```
 
 #### RegisterValidation 
@@ -1735,7 +1735,7 @@ func RegisterValidation(name string, validation ValidationHandle)
 #### import
 
 ```go
-import "github.com/whf-sky/efficient/widget/generate"
+import "github.com/whf-sky/efficient/generate"
 ```
 
 #### RegisterGenerate 
@@ -1755,7 +1755,7 @@ func RegisterGenerate(driver string, generate GenerateInterface)
 #### import
 
 ```go
-import "github.com/whf-sky/efficient/widget/database"
+import "github.com/whf-sky/efficient/database"
 ```
 
 #### RegisterSQLS 

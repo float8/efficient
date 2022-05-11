@@ -3,7 +3,7 @@ package efficient
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
-	"github.com/whf-sky/efficient/widget/database"
+	db "github.com/whf-sky/efficient/database"
 	"math/rand"
 	"os"
 	"strconv"
@@ -28,7 +28,7 @@ var Logger = func() *logrus.Logger {
 	logger.SetReportCaller(true)
 
 	//database Logger
-	database.Logger = logger
+	db.Logger = logger
 
 	return logger
 }()
@@ -37,13 +37,13 @@ var Log = func() *logrus.Entry {
 	log := logrus.NewEntry(Logger)
 
 	//database Log
-	database.Log = log
+	db.Log = log
 	return log
 }()
 
 func SetLogger(fun func(logger *logrus.Logger, log *logrus.Entry)) {
 	fun(Logger, Log)
-	database.SetLogger(func(logger *logrus.Logger, log *logrus.Entry) {
+	db.SetLogger(func(logger *logrus.Logger, log *logrus.Entry) {
 		logger = Logger
 	})
 }

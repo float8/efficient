@@ -30,10 +30,10 @@ type ControllerInterface interface {
 }
 
 // Prepare 在请求函数执行之前，在Init之后运行。
-func (c *Controller) Prepare(cxt Context) {}
+func (c *Controller) Prepare(Context) {}
 
 // Finish 在请求函数执行后运行。
-func (c *Controller) Finish(cxt Context) {}
+func (c *Controller) Finish(Context) {}
 
 // Get 添加一个请求函数来处理GET请求。
 func (c *Controller) Get(cxt Context) {
@@ -55,7 +55,7 @@ func (c *Controller) Put(cxt Context) {
 	http.Error(cxt.Writer, "Method Not Allowed", http.StatusMethodNotAllowed)
 }
 
-// Put  添加一个请求函数来处理 HEAD 请求
+// Head  添加一个请求函数来处理 HEAD 请求
 func (c *Controller) Head(cxt Context) {
 	http.Error(cxt.Writer, "Method Not Allowed", http.StatusMethodNotAllowed)
 }
