@@ -135,7 +135,7 @@ func (a *Application) main() {
 		"import (\n\t\"github.com/float8/efficient\"\n\t" +
 		"_ \"#app_path#/config\"\n)\n\n" +
 		"func main(){\n\tefficient.WebRun()\n}"
-	apppaths := strings.Split(a.basepath, "/go/src/")
-	code = strings.ReplaceAll(code, "#app_path#", apppaths[1])
+	apppaths := strings.SplitAfter(a.basepath, "/")
+	code = strings.ReplaceAll(code, "#app_path#", apppaths[len(apppaths)-1])
 	public.WriteFile(a.basepath+"/"+a.appdirs["cmd"]+"/main.go", code)
 }

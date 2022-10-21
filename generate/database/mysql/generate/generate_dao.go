@@ -44,8 +44,8 @@ func (g *generateDao) packageHandle() {
 }
 
 func (g *generateDao) importHandle() {
-	modelPath := strings.Split(g.modelPath, "go/src/")
-	g.sections["import"] = strings.ReplaceAll(g.sections["import"], "#modelimport#", modelPath[1])
+	modelPath := strings.SplitAfter(g.modelPath, "/")
+	g.sections["import"] = strings.ReplaceAll(g.sections["import"], "#modelimport#", modelPath[len(modelPath)-1])
 }
 
 func (g *generateDao) modelHandle() {
