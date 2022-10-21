@@ -2,8 +2,8 @@ package generate
 
 import (
 	"database/sql"
-	"github.com/whf-sky/efficient/generate/application"
-	"github.com/whf-sky/efficient/generate/database/mysql/generate"
+	"github.com/float8/efficient/generate/application"
+	"github.com/float8/efficient/generate/database/mysql/generate"
 	"log"
 	"path/filepath"
 )

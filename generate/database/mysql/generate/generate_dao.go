@@ -1,29 +1,30 @@
 package generate
 
 import (
-	estrings "github.com/whf-sky/efficient/tools/strings"
+	estrings "github.com/float8/efficient/tools/strings"
 	"strings"
 )
 
-func newGenerateDao(modelPath , pkg, tableName string) *generateDao {
+func newGenerateDao(modelPath, pkg, tableName string) *generateDao {
 	return &generateDao{
 		pkg:       pkg,
 		tableName: tableName,
 		modelPath: modelPath,
 		sections: map[string]string{
-			"package":   "package #package#",
-			"import":    "import (\n\t\"#modelimport#\"\n\t\"github.com/whf-sky/efficient/database\"\n)",
-			"new":       "func New#model#Dao() *#model#Dao {\n\td := &#model#Dao{}\n\td.Init(func() database.ModelInterface {return model.New#model#()})\n\treturn d\n}",
-			"struct":   "type #model#Dao struct {\n\tDao\n}",
+			"package": "package #package#",
+			"import":  "import (\n\t\"#modelimport#\"\n\t\"github.com/float8/efficient/database\"\n)",
+			"new":     "func New#model#Dao() *#model#Dao {\n\td := &#model#Dao{}\n\td.Init(func() database.ModelInterface {return model.New#model#()})\n\treturn d\n}",
+			"struct":  "type #model#Dao struct {\n\tDao\n}",
 		},
-		sectionsOrder:     []string{"package", "import", "new", "struct"},
+		sectionsOrder: []string{"package", "import", "new", "struct"},
 	}
 }
+
 type generateDao struct {
-	tableName string
-	modelPath string
-	pkg string
-	sections map[string]string
+	tableName     string
+	modelPath     string
+	pkg           string
+	sections      map[string]string
 	sectionsOrder []string
 }
 

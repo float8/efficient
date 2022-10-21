@@ -3,7 +3,7 @@ package validation
 import (
 	"errors"
 	"fmt"
-	"github.com/whf-sky/efficient/validation/lang"
+	"github.com/float8/efficient/validation/lang"
 )
 
 func Lang(key string) string {
@@ -20,8 +20,6 @@ func Error(key string, a ...interface{}) error {
 func ErrorType(s ...interface{}) error {
 	return Error("error_type", s...)
 }
-
-
 
 func Required(comment string, data, param interface{}) error {
 	if data != nil {

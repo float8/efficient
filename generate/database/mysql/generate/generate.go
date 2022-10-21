@@ -2,9 +2,9 @@ package generate
 
 import (
 	"database/sql"
-	"github.com/whf-sky/efficient/database"
-	"github.com/whf-sky/efficient/generate/database/mysql/dao"
-	"github.com/whf-sky/efficient/generate/public"
+	"github.com/float8/efficient/database"
+	"github.com/float8/efficient/generate/database/mysql/dao"
+	"github.com/float8/efficient/generate/public"
 	"strings"
 )
 

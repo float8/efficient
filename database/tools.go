@@ -4,7 +4,7 @@ import (
 	"database/sql"
 	"encoding/json"
 	"errors"
-	"github.com/whf-sky/efficient/validation"
+	"github.com/float8/efficient/validation"
 )
 
 func nullType(data interface{}) interface{} {
@@ -102,7 +102,7 @@ func sets(d *Dao) (kv map[string]interface{}, columns []string, values []interfa
 	return
 }
 
-//checkValues 检查数据是否满足条件
+// checkValues 检查数据是否满足条件
 func checkValues(validation *validation.Validation, tags Tags, column string, value interface{}) error {
 	if len(tags.Validators) == 0 {
 		return nil

@@ -1,7 +1,7 @@
 package generate
 
 import (
-	estrings "github.com/whf-sky/efficient/tools/strings"
+	estrings "github.com/float8/efficient/tools/strings"
 	"strings"
 )
 
@@ -12,12 +12,12 @@ func newGenerateBaseModel(tables []string, dbname, path string) *generateBaseMod
 		tables: tables,
 		sections: map[string]string{
 			"package": "package #package#",
-			"import":  "import \"github.com/whf-sky/efficient/database\"",
+			"import":  "import \"github.com/float8/efficient/database\"",
 			"struct":  "type Model struct {\n\tdatabase.Model\n}",
 			"minit":   "func (m *Model) init(key string) *Model {\n\tm.Model.Init(\"mysql\",\"#dbname#\", key)\n\treturn m\n}",
 			"init":    "func init() {\n#register#\n}",
 		},
-		sectionsOrder: []string{"package", "import","struct", "minit", "init"},
+		sectionsOrder: []string{"package", "import", "struct", "minit", "init"},
 	}
 }
 

@@ -2,9 +2,9 @@ package database
 
 import (
 	"database/sql"
+	"github.com/float8/efficient/tools/numeric"
+	"github.com/float8/efficient/validation"
 	"github.com/shopspring/decimal"
-	"github.com/whf-sky/efficient/tools/numeric"
-	"github.com/whf-sky/efficient/validation"
 	"math"
 	"reflect"
 	"strconv"

@@ -12,8 +12,8 @@ func newGenerateBaseDao(tables []string, path string) *generateBaseDao {
 			"\n\nimport (\n\t" +
 			"\"database/sql\"\n\t" +
 			"_ \"github.com/go-sql-driver/mysql\"\n\t" +
-			"\"github.com/whf-sky/efficient.demo/config\"\n\t" +
-			"\"github.com/whf-sky/efficient/database\"\n)\n\n" +
+			"\"github.com/float8/efficient.demo/config\"\n\t" +
+			"\"github.com/float8/efficient/database\"\n)\n\n" +
 			"var db = func() *sql.DB {\n\t" +
 			"return database.NewDb().MysqlDsn(\n\t\t" +
 			"config.DbConfig.Addr,\n\t\t" +
@@ -33,10 +33,10 @@ func newGenerateBaseDao(tables []string, path string) *generateBaseDao {
 }
 
 type generateBaseDao struct {
-	code string
-	path          string
-	tables        []string
-	pkg string
+	code   string
+	path   string
+	tables []string
+	pkg    string
 }
 
 func (g *generateBaseDao) generate() (code, pkg string) {

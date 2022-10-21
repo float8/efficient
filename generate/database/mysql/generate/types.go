@@ -83,15 +83,15 @@ var types = map[string]goType{
 	},
 	"date": {
 		name: "database.Date",
-		pkg:  "github.com/whf-sky/efficient/database",
+		pkg:  "github.com/float8/efficient/database",
 	},
 	"datetime": {
 		name: "database.Time",
-		pkg:  "github.com/whf-sky/efficient/database",
+		pkg:  "github.com/float8/efficient/database",
 	},
 	"timestamp": {
 		name: "database.Time",
-		pkg:  "github.com/whf-sky/efficient/database",
+		pkg:  "github.com/float8/efficient/database",
 	},
 	"year": {
 		name: "string",
@@ -106,11 +106,11 @@ var types = map[string]goType{
 	},
 	"bit": {
 		name: "database.Bit",
-		pkg:  "github.com/whf-sky/efficient/database",
+		pkg:  "github.com/float8/efficient/database",
 	},
 	"bits": {
 		name: "database.Bits",
-		pkg:  "github.com/whf-sky/efficient/database",
+		pkg:  "github.com/float8/efficient/database",
 	},
 	"char": {
 		name: "string",
@@ -135,7 +135,7 @@ var types = map[string]goType{
 	},
 	"set": {
 		name: "database.Set",
-		pkg:  "github.com/whf-sky/efficient/database",
+		pkg:  "github.com/float8/efficient/database",
 	},
 	"tinyint": {
 		name:     "int8",
@@ -175,15 +175,15 @@ var types = map[string]goType{
 var nullTypes = map[string]goType{
 	"date": {
 		name: "database.NullDate",
-		pkg:  "github.com/whf-sky/efficient/database",
+		pkg:  "github.com/float8/efficient/database",
 	},
 	"datetime": {
 		name: "database.NullTime",
-		pkg:  "github.com/whf-sky/efficient/database",
+		pkg:  "github.com/float8/efficient/database",
 	},
 	"timestamp": {
 		name: "database.Time",
-		pkg:  "github.com/whf-sky/efficient/database",
+		pkg:  "github.com/float8/efficient/database",
 	},
 	"time": {
 		name: "sql.NullString",
@@ -195,11 +195,11 @@ var nullTypes = map[string]goType{
 	},
 	"bit": {
 		name: "database.NullBit",
-		pkg:  "github.com/whf-sky/efficient/database",
+		pkg:  "github.com/float8/efficient/database",
 	},
 	"bits": {
 		name: "database.NullBits",
-		pkg:  "github.com/whf-sky/efficient/database",
+		pkg:  "github.com/float8/efficient/database",
 	},
 	"char": {
 		name: "sql.NullString",
@@ -231,11 +231,11 @@ var nullTypes = map[string]goType{
 	},
 	"set": {
 		name: "database.NullSet",
-		pkg:  "github.com/whf-sky/efficient/database",
+		pkg:  "github.com/float8/efficient/database",
 	},
 	"double": {
-		name:     "sql.NullFloat64",
-		pkg:      "database/sql",
+		name: "sql.NullFloat64",
+		pkg:  "database/sql",
 	},
 	"float": {
 		name: "sql.NullFloat64",
@@ -254,51 +254,51 @@ var nullTypes = map[string]goType{
 		pkg:  "github.com/shopspring/decimal",
 	},
 	"tinyint": {
-		name:     "database.NullInt8",
-		pkg:      "github.com/whf-sky/efficient/database",
+		name: "database.NullInt8",
+		pkg:  "github.com/float8/efficient/database",
 		unsigned: goUtype{
-			name:     "database.NullUint8",
-			pkg:      "github.com/whf-sky/efficient/database",
+			name: "database.NullUint8",
+			pkg:  "github.com/float8/efficient/database",
 		},
 	},
 	"smallint": {
-		name:     "sql.NullInt16",
-		pkg:      "database/sql",
+		name: "sql.NullInt16",
+		pkg:  "database/sql",
 		unsigned: goUtype{
-			name:     "database.NullUint16",
-			pkg:      "github.com/whf-sky/efficient/database",
+			name: "database.NullUint16",
+			pkg:  "github.com/float8/efficient/database",
 		},
 	},
 	"mediumint": {
-		name:     "sql.NullInt32",
-		pkg:      "database/sql",
+		name: "sql.NullInt32",
+		pkg:  "database/sql",
 		unsigned: goUtype{
-			name:     "database.NullUint32",
-			pkg:      "github.com/whf-sky/efficient/database",
+			name: "database.NullUint32",
+			pkg:  "github.com/float8/efficient/database",
 		},
 	},
 	"int": {
 		name: "sql.NullInt32",
 		pkg:  "database/sql",
 		unsigned: goUtype{
-			name:     "database.NullUint32",
-			pkg:      "github.com/whf-sky/efficient/database",
+			name: "database.NullUint32",
+			pkg:  "github.com/float8/efficient/database",
 		},
 	},
 	"integer": {
-		name:     "sql.NullInt32",
-		pkg:      "database/sql",
+		name: "sql.NullInt32",
+		pkg:  "database/sql",
 		unsigned: goUtype{
-			name:     "database.NullUint32",
-			pkg:      "github.com/whf-sky/efficient/database",
+			name: "database.NullUint32",
+			pkg:  "github.com/float8/efficient/database",
 		},
 	},
 	"bigint": {
 		name: "sql.NullInt64",
 		pkg:  "database/sql",
 		unsigned: goUtype{
-			name:     "database.NullUint64",
-			pkg:      "github.com/whf-sky/efficient/database",
+			name: "database.NullUint64",
+			pkg:  "github.com/float8/efficient/database",
 		},
 	},
 }

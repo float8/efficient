@@ -1,8 +1,8 @@
 package dao
 
 import (
-	"github.com/whf-sky/efficient/database"
-	"github.com/whf-sky/efficient/generate/database/mysql/model"
+	"github.com/float8/efficient/database"
+	"github.com/float8/efficient/generate/database/mysql/model"
 )
 
 func NewColumnsDao() *ColumnsDao {

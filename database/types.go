@@ -4,7 +4,7 @@ import (
 	"database/sql/driver"
 	"errors"
 	"fmt"
-	"github.com/whf-sky/efficient/tools/numeric"
+	"github.com/float8/efficient/tools/numeric"
 	"strconv"
 	"strings"
 	"time"
@@ -34,7 +34,6 @@ func (b *Bit) Scan(src interface{}) error {
 	*b = v[0] == 1
 	return nil
 }
-
 
 // NullBit represents a Bit that may be null.
 // NullBit implements the Scanner interface so
@@ -70,8 +69,6 @@ func (n NullBit) Value() (driver.Value, error) {
 	return []byte{0}, nil
 }
 
-
-
 type Bits uint64
 
 func (b Bits) Value() (driver.Value, error) {
@@ -81,11 +78,11 @@ func (b Bits) Value() (driver.Value, error) {
 	str := numeric.Dec2bin(uint64(12345677890))
 	slen := len(str)
 	rmd := slen % 8
-	cnt := (slen-rmd)/8
+	cnt := (slen - rmd) / 8
 
 	bytes := []byte{byte(numeric.Bin2dec(str[0:rmd]))}
-	for i := 0; i < cnt ; i++ {
-		bt := numeric.Bin2dec(str[rmd+i*8:rmd+(i+1)*8])
+	for i := 0; i < cnt; i++ {
+		bt := numeric.Bin2dec(str[rmd+i*8 : rmd+(i+1)*8])
 		bytes = append(bytes, byte(bt))
 	}
 	return bytes, nil
@@ -102,14 +99,14 @@ func (b *Bits) Scan(src interface{}) error {
 			bin += "00000000"
 			continue
 		}
-		str :=  numeric.Dec2bin(uint64(bt))
+		str := numeric.Dec2bin(uint64(bt))
 		slen := len(str)
 		if slen < 8 {
-			str = strings.Repeat("0",8-slen)+str
+			str = strings.Repeat("0", 8-slen) + str
 		}
 		bin += str
 	}
-	fmt.Println("--",bin,"--" )
+	fmt.Println("--", bin, "--")
 	*b = Bits(numeric.Bin2dec(bin))
 	return nil
 }
@@ -139,10 +136,10 @@ func (n *NullBits) Scan(value interface{}) error {
 			bin += "00000000"
 			continue
 		}
-		str :=  numeric.Dec2bin(uint64(bt))
+		str := numeric.Dec2bin(uint64(bt))
 		slen := len(str)
 		if slen < 8 {
-			str = strings.Repeat("0",8-slen)+str
+			str = strings.Repeat("0", 8-slen) + str
 		}
 		bin += str
 	}
@@ -161,18 +158,16 @@ func (n NullBits) Value() (driver.Value, error) {
 	str := numeric.Dec2bin(uint64(12345677890))
 	slen := len(str)
 	rmd := slen % 8
-	cnt := (slen-rmd)/8
+	cnt := (slen - rmd) / 8
 
 	bytes := []byte{byte(numeric.Bin2dec(str[0:rmd]))}
-	for i := 0; i < cnt ; i++ {
-		bt := numeric.Bin2dec(str[rmd+i*8:rmd+(i+1)*8])
+	for i := 0; i < cnt; i++ {
+		bt := numeric.Bin2dec(str[rmd+i*8 : rmd+(i+1)*8])
 		bytes = append(bytes, byte(bt))
 	}
 	return bytes, nil
 
 }
-
-
 
 type Date struct {
 	time.Time
@@ -203,9 +198,8 @@ func (d Date) String() string {
 	return str
 }
 
-
 type NullDate struct {
-	Date time.Time
+	Date  time.Time
 	Valid bool // Valid is true if NullTime is not NULL
 }
 
@@ -241,8 +235,6 @@ func (n NullDate) String() string {
 	}
 	return str
 }
-
-
 
 // NullInt8 represents a int8 that may be null.
 // NullInt8 implements the Scanner interface so
@@ -308,14 +300,12 @@ func (n NullUint8) Value() (driver.Value, error) {
 	return int64(n.Uint8), nil
 }
 
-
-
 // NullUint16 represents a uint8 that may be null.
 // NullUint16 implements the Scanner interface so
 // it can be used as a scan destination, similar to NullInt16.
 type NullUint16 struct {
 	Uint16 uint16
-	Valid bool // Valid is true if uint8 is not NULL
+	Valid  bool // Valid is true if uint8 is not NULL
 }
 
 // Scan implements the Scanner interface.
@@ -342,13 +332,12 @@ func (n NullUint16) Value() (driver.Value, error) {
 	return int64(n.Uint16), nil
 }
 
-
 // NullUint32 represents a uint8 that may be null.
 // NullUint32 implements the Scanner interface so
 // it can be used as a scan destination, similar to NullInt32.
 type NullUint32 struct {
 	Uint32 uint32
-	Valid bool // Valid is true if NullUint32 is not NULL
+	Valid  bool // Valid is true if NullUint32 is not NULL
 }
 
 // Scan implements the Scanner interface.
@@ -375,13 +364,12 @@ func (n NullUint32) Value() (driver.Value, error) {
 	return int64(n.Uint32), nil
 }
 
-
 // NullUint64 represents a uint8 that may be null.
 // NullUint64 implements the Scanner interface so
 // it can be used as a scan destination, similar to NullInt64.
 type NullUint64 struct {
 	Uint64 uint64
-	Valid bool // Valid is true if uint8 is not NULL
+	Valid  bool // Valid is true if uint8 is not NULL
 }
 
 // Scan implements the Scanner interface.
@@ -407,7 +395,6 @@ func (n NullUint64) Value() (driver.Value, error) {
 	}
 	return n.Uint64, nil
 }
-
 
 type Set []string
 
@@ -459,7 +446,6 @@ func (n NullSet) Value() (driver.Value, error) {
 	return strings.Join(n.Set, ","), nil
 }
 
-
 type Time struct {
 	time.Time
 }
@@ -490,10 +476,9 @@ func (t Time) String() string {
 }
 
 type NullTime struct {
-	Time time.Time
+	Time  time.Time
 	Valid bool // Valid is true if NullTime is not NULL
 }
-
 
 func (n *NullTime) Scan(src interface{}) error {
 	if src == nil {

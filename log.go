@@ -1,9 +1,9 @@
 package efficient
 
 import (
+	db "github.com/float8/efficient/database"
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
-	db "github.com/whf-sky/efficient/database"
 	"math/rand"
 	"os"
 	"strconv"
@@ -14,7 +14,7 @@ var Logger = func() *logrus.Logger {
 	logger := logrus.New()
 	// Log as JSON instead of the default ASCII formatter.
 	logger.SetFormatter(&logrus.JSONFormatter{
-		TimestampFormat : "2006-01-02 15:04:05.000",
+		TimestampFormat: "2006-01-02 15:04:05.000",
 	})
 
 	// Output to stdout instead of the default stderr
@@ -53,7 +53,7 @@ func ginLogger(ctx *gin.Context) {
 	id := strconv.FormatUint(rand.Uint64(), 10)
 
 	Log = Log.WithFields(logrus.Fields{
-		"id":        id,
+		"id": id,
 	})
 
 	Log.WithFields(logrus.Fields{

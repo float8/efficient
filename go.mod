@@ -1,4 +1,4 @@
-module github.com/whf-sky/efficient
+module github.com/float8/efficient
 
 go 1.17
 

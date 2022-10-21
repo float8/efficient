@@ -37,13 +37,13 @@ _efficient 主要基于下面的包进行了封装, 基本保留了原有包的�
 #### 1. 首先需要安装 [Go](https://golang.org/) (**version 1.10+**), 可以使用下面的命令进行安装 efficient.
 
 ```sh
-$ go get github.com/whf-sky/efficient
+$ go get github.com/float8/efficient
 ```
 
 #### 2. 导入你的代码
 
 ```go
-import "github.com/whf-sky/efficient"
+import "github.com/float8/efficient"
 ```
 
 如使用go mod包依赖管理工具,请参考下面命令
@@ -82,7 +82,7 @@ $ cat main.go
 package main
 
 import (
-  "github.com/whf-sky/efficient"
+  "github.com/float8/efficient"
   "net/http"
 )
 
@@ -118,8 +118,8 @@ package main
 
 import (
 	_ "github.com/go-sql-driver/mysql"
-	"github.com/whf-sky/efficient/database"
-	"github.com/whf-sky/efficient/generate"
+	"github.com/float8/efficient/database"
+	"github.com/float8/efficient/generate"
 )
 
 func main() {
@@ -199,7 +199,7 @@ efficient.Routers.
 package main
 
 import (
-  "github.com/whf-sky/efficient"
+  "github.com/float8/efficient"
 )
 
 type TestController struct {
@@ -253,7 +253,7 @@ package model
 
 import (
 	"encoding/json"
-	"github.com/whf-sky/efficient/database"
+	"github.com/float8/efficient/database"
 )
 
 //实例化model
@@ -545,15 +545,15 @@ var types = map[string]goType{
 	},
 	"date": {
 		name: "database.Date",
-		pkg:  "github.com/whf-sky/efficient/database",
+		pkg:  "github.com/float8/efficient/database",
 	},
 	"datetime": {
 		name: "database.Time",
-		pkg:  "github.com/whf-sky/efficient/database",
+		pkg:  "github.com/float8/efficient/database",
 	},
 	"timestamp": {
 		name: "database.Time",
-		pkg:  "github.com/whf-sky/efficient/database",
+		pkg:  "github.com/float8/efficient/database",
 	},
 	"year": {
 		name: "string",
@@ -568,11 +568,11 @@ var types = map[string]goType{
 	},
 	"bit": {
 		name: "database.Bit",
-		pkg:  "github.com/whf-sky/efficient/database",
+		pkg:  "github.com/float8/efficient/database",
 	},
 	"bits": {
 		name: "database.Bits",
-		pkg:  "github.com/whf-sky/efficient/database",
+		pkg:  "github.com/float8/efficient/database",
 	},
 	"char": {
 		name: "string",
@@ -597,7 +597,7 @@ var types = map[string]goType{
 	},
 	"set": {
 		name: "database.Set",
-		pkg:  "github.com/whf-sky/efficient/database",
+		pkg:  "github.com/float8/efficient/database",
 	},
 	"tinyint": {
 		name:     "int8",
@@ -643,15 +643,15 @@ var types = map[string]goType{
 var nullTypes = map[string]goType{
   "date": {
     name: "database.NullDate",
-    pkg:  "github.com/whf-sky/efficient/database",
+    pkg:  "github.com/float8/efficient/database",
   },
   "datetime": {
     name: "database.NullTime",
-    pkg:  "github.com/whf-sky/efficient/database",
+    pkg:  "github.com/float8/efficient/database",
   },
   "timestamp": {
     name: "database.Time",
-    pkg:  "github.com/whf-sky/efficient/database",
+    pkg:  "github.com/float8/efficient/database",
   },
   "time": {
     name: "sql.NullString",
@@ -663,11 +663,11 @@ var nullTypes = map[string]goType{
   },
   "bit": {
     name: "database.NullBit",
-    pkg:  "github.com/whf-sky/efficient/database",
+    pkg:  "github.com/float8/efficient/database",
   },
   "bits": {
     name: "database.NullBits",
-    pkg:  "github.com/whf-sky/efficient/database",
+    pkg:  "github.com/float8/efficient/database",
   },
   "char": {
     name: "sql.NullString",
@@ -699,7 +699,7 @@ var nullTypes = map[string]goType{
   },
   "set": {
     name: "database.NullSet",
-    pkg:  "github.com/whf-sky/efficient/database",
+    pkg:  "github.com/float8/efficient/database",
   },
   "double": {
     name:     "sql.NullFloat64",
@@ -723,10 +723,10 @@ var nullTypes = map[string]goType{
   },
   "tinyint": {
     name:     "database.NullInt8",
-    pkg:      "github.com/whf-sky/efficient/database",
+    pkg:      "github.com/float8/efficient/database",
     unsigned: goUtype{
       name:     "database.NullUint8",
-      pkg:      "github.com/whf-sky/efficient/database",
+      pkg:      "github.com/float8/efficient/database",
     },
   },
   "smallint": {
@@ -734,7 +734,7 @@ var nullTypes = map[string]goType{
     pkg:      "database/sql",
     unsigned: goUtype{
       name:     "database.NullUint16",
-      pkg:      "github.com/whf-sky/efficient/database",
+      pkg:      "github.com/float8/efficient/database",
     },
   },
   "mediumint": {
@@ -742,7 +742,7 @@ var nullTypes = map[string]goType{
     pkg:      "database/sql",
     unsigned: goUtype{
       name:     "database.NullUint32",
-      pkg:      "github.com/whf-sky/efficient/database",
+      pkg:      "github.com/float8/efficient/database",
     },
   },
   "int": {
@@ -750,7 +750,7 @@ var nullTypes = map[string]goType{
     pkg:  "database/sql",
     unsigned: goUtype{
       name:     "database.NullUint32",
-      pkg:      "github.com/whf-sky/efficient/database",
+      pkg:      "github.com/float8/efficient/database",
     },
   },
   "integer": {
@@ -758,7 +758,7 @@ var nullTypes = map[string]goType{
     pkg:      "database/sql",
     unsigned: goUtype{
       name:     "database.NullUint32",
-      pkg:      "github.com/whf-sky/efficient/database",
+      pkg:      "github.com/float8/efficient/database",
     },
   },
   "bigint": {
@@ -766,7 +766,7 @@ var nullTypes = map[string]goType{
     pkg:  "database/sql",
     unsigned: goUtype{
       name:     "database.NullUint64",
-      pkg:      "github.com/whf-sky/efficient/database",
+      pkg:      "github.com/float8/efficient/database",
     },
   },
   }
@@ -789,7 +789,7 @@ database.RegisterModel(NewUsers())
 ```go
 package model
 
-import "github.com/whf-sky/efficient/database"
+import "github.com/float8/efficient/database"
 
 type Model struct {
   database.Model
@@ -832,8 +832,8 @@ package dao
 import (
   "database/sql"
   _ "github.com/go-sql-driver/mysql"
-  "github.com/whf-sky/efficient.demo/application/model"
-  "github.com/whf-sky/efficient/database"
+  "github.com/float8/efficient.demo/application/model"
+  "github.com/float8/efficient/database"
   "time"
 )
 
@@ -904,8 +904,8 @@ package dao
 import (
   "database/sql"
   _ "github.com/go-sql-driver/mysql"
-  "github.com/whf-sky/efficient.demo/config"
-  "github.com/whf-sky/efficient/database"
+  "github.com/float8/efficient.demo/config"
+  "github.com/float8/efficient/database"
 )
 
 var db = func() *sql.DB {
@@ -942,7 +942,7 @@ package dao
 
 import (
 	"efficient.demo/application/model"
-	"github.com/whf-sky/efficient/database"
+	"github.com/float8/efficient/database"
 )
 
 func NewUsersDao() *UsersDao {
@@ -972,8 +972,8 @@ package main
 
 import (
   "fmt"
-  "github.com/whf-sky/efficient.demo/application/dao"
-  "github.com/whf-sky/efficient.demo/application/model"
+  "github.com/float8/efficient.demo/application/dao"
+  "github.com/float8/efficient.demo/application/model"
   "math/rand"
   "strconv"
   "time"
@@ -1018,8 +1018,8 @@ package main
 
 import (
 	"fmt"
-	"github.com/whf-sky/efficient.demo/application/dao"
-	"github.com/whf-sky/efficient.demo/application/model"
+	"github.com/float8/efficient.demo/application/dao"
+	"github.com/float8/efficient.demo/application/model"
 )
 
 func main()  {
@@ -1068,8 +1068,8 @@ package main
 
 import (
 	"fmt"
-	"github.com/whf-sky/efficient.demo/application/dao"
-	"github.com/whf-sky/efficient.demo/application/model"
+	"github.com/float8/efficient.demo/application/dao"
+	"github.com/float8/efficient.demo/application/model"
 )
 
 func main() {
@@ -1106,7 +1106,7 @@ package main
 
 import (
   "fmt"
-  "github.com/whf-sky/efficient.demo/application/dao"
+  "github.com/float8/efficient.demo/application/dao"
 )
 
 func main()  {
@@ -1151,7 +1151,7 @@ package main
 
 import (
   "fmt"
-  "github.com/whf-sky/efficient.demo/application/dao"
+  "github.com/float8/efficient.demo/application/dao"
 )
 
 func main()  {
@@ -1278,7 +1278,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/whf-sky/efficient.demo/application/dao"
+	"github.com/float8/efficient.demo/application/dao"
 )
 
 func main()  {
@@ -1345,7 +1345,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/whf-sky/efficient/validation"
+	"github.com/float8/efficient/validation"
 )
 
 func main() {
@@ -1363,7 +1363,7 @@ func main() {
 #### import
 
 ```go
-import "github.com/whf-sky/efficient/validation"
+import "github.com/float8/efficient/validation"
 ```
 
 #### New
@@ -1511,7 +1511,7 @@ package config
 import (
   "github.com/gin-gonic/gin"
   "github.com/sirupsen/logrus"
-  "github.com/whf-sky/efficient"
+  "github.com/float8/efficient"
   "os"
 )
 
@@ -1532,7 +1532,7 @@ func init()  {
 ## import
 
 ```go
-import "github.com/whf-sky/efficient"
+import "github.com/float8/efficient"
 ```
 
 ## Logger的设置
@@ -1542,7 +1542,7 @@ package config
 
 import (
 	"github.com/sirupsen/logrus"
-	"github.com/whf-sky/efficient"
+	"github.com/float8/efficient"
 )
 
 func init()  {
@@ -1571,7 +1571,7 @@ func SetLogger(fun func(logger *logrus.Logger, log *logrus.Entry))
 ## import
 
 ```go
-import "github.com/whf-sky/efficient"
+import "github.com/float8/efficient"
 ```
 
 ## 获取环境变量 
@@ -1616,15 +1616,15 @@ generate.SetDb("mysql", db).Database("test")
 
 `github.com/go-sql-driver/mysql mysql连接驱动包`
 
-`github.com/whf-sky/efficient/database 数据层包`
+`github.com/float8/efficient/database 数据层包`
 
-`github.com/whf-sky/efficient/generate 生成器的包`
+`github.com/float8/efficient/generate 生成器的包`
 
 ```go
 import (
 	_ "github.com/go-sql-driver/mysql"
-	"github.com/whf-sky/efficient/database"
-	"github.com/whf-sky/efficient/generate"
+	"github.com/float8/efficient/database"
+	"github.com/float8/efficient/generate"
 )
 ```
 
@@ -1675,7 +1675,7 @@ generate.
 #### import
 
 ```go
-import "github.com/whf-sky/efficient/generate/database/mysql/generate"
+import "github.com/float8/efficient/generate/database/mysql/generate"
 ```
 
 #### RegisterType 
@@ -1715,7 +1715,7 @@ func RegisterNullType(unsigned bool, mType, gType string, pkgs ...string)
 #### import
 
 ```go
-import "github.com/whf-sky/efficient/validation"
+import "github.com/float8/efficient/validation"
 ```
 
 #### RegisterValidation 
@@ -1735,7 +1735,7 @@ func RegisterValidation(name string, validation ValidationHandle)
 #### import
 
 ```go
-import "github.com/whf-sky/efficient/generate"
+import "github.com/float8/efficient/generate"
 ```
 
 #### RegisterGenerate 
@@ -1755,7 +1755,7 @@ func RegisterGenerate(driver string, generate GenerateInterface)
 #### import
 
 ```go
-import "github.com/whf-sky/efficient/database"
+import "github.com/float8/efficient/database"
 ```
 
 #### RegisterSQLS 

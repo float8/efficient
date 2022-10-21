@@ -1,7 +1,7 @@
 package database
 
 import (
-	"github.com/whf-sky/efficient/database/mysql"
+	"github.com/float8/efficient/database/mysql"
 )
 
 //----------------------RegisterModel--------------------------------
@@ -14,7 +14,7 @@ type modelKeys map[string]ModelInterface
 
 var models = modelDirvers{}
 
-//RegisterModel Register model for tags
+// RegisterModel Register model for tags
 func RegisterModel(model ModelInterface) {
 	parseModel(model)
 	if _, ok := models[model.DriverName()]; !ok {

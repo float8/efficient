@@ -2,7 +2,7 @@ package model
 
 import (
 	"database/sql"
-	"github.com/whf-sky/efficient/database"
+	"github.com/float8/efficient/database"
 )
 
 func NewColumns() *Columns {
