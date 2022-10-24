@@ -3,24 +3,25 @@ package application
 import (
 	"github.com/float8/efficient/generate/public"
 	"os"
-	"path/filepath"
 	"strings"
 )
 
-func NewApplication(appdirs map[string]string) *Application {
-	path, err := filepath.Abs("./")
-	if err != nil {
-		panic(err)
-	}
+func NewApplication(basePath, projectPath string, appDirs map[string]string) *Application {
 	return &Application{
-		basepath: path,
-		appdirs:  appdirs,
+		basePath:    basePath,
+		projectPath: projectPath,
+		appDirs:     appDirs,
 	}
 }
 
 type Application struct {
-	basepath string
-	appdirs  map[string]string
+	basePath    string
+	projectPath string
+	appDirs     map[string]string
+}
+
+func (a *Application) absPath(dirname, file string) string {
+	return a.basePath + a.projectPath + "/" + a.appDirs[dirname] + "/" + file
 }
 
 func (a *Application) Execute() {
@@ -34,8 +35,8 @@ func (a *Application) Execute() {
 }
 
 func (a *Application) dirs() {
-	for _, dir := range a.appdirs {
-		path := a.basepath + "/" + dir
+	for _, dir := range a.appDirs {
+		path := a.basePath + a.projectPath + "/" + dir
 		err := os.MkdirAll(path, 0766)
 		if err != nil {
 			panic(err)
@@ -51,7 +52,8 @@ func (a *Application) config() {
 		"if env == \"production\" {" +
 		"\n\t\tefficient.Config.Addr = \":80\"\n\t\t" +
 		"efficient.Config.Debug = true\n\t}\n}\n"
-	public.WriteFile(a.basepath+"/"+a.appdirs["config"]+"/config.go", code)
+	absPath := a.absPath("config", "config.go")
+	public.WriteFile(absPath, code)
 }
 
 func (a *Application) loggerConfig() {
@@ -70,7 +72,9 @@ func (a *Application) loggerConfig() {
 		"logger.SetReportCaller(false)\n\t\t\t" +
 		"log = logrus.NewEntry(logger)\n\t\t\t" +
 		"logger.Out = os.Stdout\n\t\t})\n\t}\n}"
-	public.WriteFile(a.basepath+"/"+a.appdirs["config"]+"/logger.go", code)
+
+	absPath := a.absPath("config", "logger.go")
+	public.WriteFile(absPath, code)
 }
 
 func (a *Application) databaseConfig() {
@@ -103,7 +107,8 @@ func (a *Application) databaseConfig() {
 		"ConnMaxIdleTime:    time.Minute * 2,\n\t\t\t" +
 		"MaxOpenConns:       5,\n\t\t\t" +
 		"MaxIdleConns:       5,\n\t\t}\n\t}\n}\n"
-	public.WriteFile(a.basepath+"/"+a.appdirs["config"]+"/database.go", code)
+	absPath := a.absPath("config", "database.go")
+	public.WriteFile(absPath, code)
 }
 
 func (a *Application) routers() {
@@ -115,10 +120,10 @@ func (a *Application) routers() {
 		"efficient.Routers.Add(\"/test\", &service.TestController{}, http.MethodGet, http.MethodPost)\n" +
 		"}"
 
-	apppaths := strings.SplitAfter(a.basepath, "/")
-	code = strings.ReplaceAll(code, "#app_path#", apppaths[len(apppaths)-1])
-	code = strings.ReplaceAll(code, "#service_path#", a.appdirs["service"])
-	public.WriteFile(a.basepath+"/"+a.appdirs["config"]+"/routers.go", code)
+	code = strings.ReplaceAll(code, "#app_path#", a.projectPath)
+	code = strings.ReplaceAll(code, "#service_path#", a.appDirs["service"])
+	absPath := a.absPath("config", "routers.go")
+	public.WriteFile(absPath, code)
 }
 
 func (a *Application) service() {
@@ -127,7 +132,9 @@ func (a *Application) service() {
 		"type TestController struct {\n\tefficient.Controller\n}\n\n" +
 		"func (this *TestController) Get(cxt efficient.Context) {\n\tid := cxt.Query(\"id\")\n\tcxt.String(200, \"get:\"+id)\n}\n\n" +
 		"func (this *TestController) Post(cxt efficient.Context) {\n\tid := cxt.PostForm(\"id\")\n\tcxt.String(200, \"post:\"+id)\n}"
-	public.WriteFile(a.basepath+"/"+a.appdirs["service"]+"/test.go", code)
+
+	absPath := a.absPath("service", "test.go")
+	public.WriteFile(absPath, code)
 }
 
 func (a *Application) main() {
@@ -135,7 +142,8 @@ func (a *Application) main() {
 		"import (\n\t\"github.com/float8/efficient\"\n\t" +
 		"_ \"#app_path#/config\"\n)\n\n" +
 		"func main(){\n\tefficient.WebRun()\n}"
-	apppaths := strings.SplitAfter(a.basepath, "/")
-	code = strings.ReplaceAll(code, "#app_path#", apppaths[len(apppaths)-1])
-	public.WriteFile(a.basepath+"/"+a.appdirs["cmd"]+"/main.go", code)
+	code = strings.ReplaceAll(code, "#app_path#", a.projectPath)
+
+	absPath := a.absPath("cmd", "main.go")
+	public.WriteFile(absPath, code)
 }

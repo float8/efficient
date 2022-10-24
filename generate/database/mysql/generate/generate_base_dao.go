@@ -45,5 +45,3 @@ func (g *generateBaseDao) generate() (code, pkg string) {
 	g.pkg = paths[len(paths)-1]
 	return strings.ReplaceAll(g.code, "#package#", g.pkg), g.pkg
 }
-
-
