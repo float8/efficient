@@ -165,7 +165,7 @@ efficient.Config.Middleware = []Middleware{
 #### 设置语言包
 
 ```go
-//参考框架 widget/lang
+//参考框架 validation/lang
 efficient.Config.Lang = Lang{
     "validation_no_lang":"不存在此语言KEY'%s'，请检查是否拼写错误！",
 }
@@ -521,7 +521,7 @@ on_insert_time insert时自动添加时间
 
 on_update_time update时自动添加时间
 
-validators 验证器，验证器请参考 widget/validation
+validators 验证器，验证器请参考 validation
 ```
 
 #### validators 示例 
@@ -1772,4 +1772,4 @@ func RegisterSQLS(driver string, sql SQLInterface)
 
 # 工具包
 
-参见 `widget/tools` 包
+参见 `tools` 包
