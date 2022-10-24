@@ -4,15 +4,16 @@ import (
 	"strings"
 )
 
-func newGenerateBaseDao(tables []string, path string) *generateBaseDao {
+func newGenerateBaseDao(tables []string, path, cnfPkg string) *generateBaseDao {
 	return &generateBaseDao{
 		path:   path,
 		tables: tables,
+		cnfPkg: cnfPkg,
 		code: "package #package#" +
 			"\n\nimport (\n\t" +
 			"\"database/sql\"\n\t" +
 			"_ \"github.com/go-sql-driver/mysql\"\n\t" +
-			"\"github.com/float8/efficient.demo/config\"\n\t" +
+			"\"#config_package#\"\n\t" +
 			"\"github.com/float8/efficient/database\"\n)\n\n" +
 			"var db = func() *sql.DB {\n\t" +
 			"return database.NewDb().MysqlDsn(\n\t\t" +
@@ -35,6 +36,7 @@ func newGenerateBaseDao(tables []string, path string) *generateBaseDao {
 type generateBaseDao struct {
 	code   string
 	path   string
+	cnfPkg string
 	tables []string
 	pkg    string
 }
@@ -43,5 +45,7 @@ func (g *generateBaseDao) generate() (code, pkg string) {
 	path := strings.Trim(g.path, "/")
 	paths := strings.Split(path, "/")
 	g.pkg = paths[len(paths)-1]
-	return strings.ReplaceAll(g.code, "#package#", g.pkg), g.pkg
+	code = strings.ReplaceAll(g.code, "#package#", g.pkg)
+	code = strings.ReplaceAll(code, "#config_package#", g.cnfPkg)
+	return code, g.pkg
 }

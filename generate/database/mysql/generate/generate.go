@@ -59,8 +59,8 @@ func (g *Generate) model() *Generate {
 
 func (g *Generate) baseDao() *Generate {
 	var code string
-	daoPath := g.projectPath + g.appDirs["dao"]
-	code, g.dpkg = newGenerateBaseDao(g.tables, daoPath).generate()
+	cnfPkg := g.projectPath + "/" + g.appDirs["config"]
+	code, g.dpkg = newGenerateBaseDao(g.tables, g.appDirs["dao"], cnfPkg).generate()
 	path := g.absPath("dao", "dao.go")
 	public.WriteFile(path, code)
 	return g
